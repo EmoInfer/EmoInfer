@@ -1,41 +1,73 @@
+#app exec file
+
 from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QGridLayout, \
-  QWidget, QPushButton, QTableWidget, QTableWidgetItem, QInputDialog, QFileDialog
+  QWidget, QPushButton, QTableWidget, QTableWidgetItem, QInputDialog, QFileDialog, QSizePolicy
+import subprocess
 
-app = QApplication([])
-window = QMainWindow()
+class VideoWindow(QMainWindow):
+    def __init__(self, parent=None):
+        super(VideoWindow, self).__init__(parent)
+        self.inp_video = QLabel()
+        self.inp_video.setText('Input: ')
+        self.filename = ''
 
-screen = QWidget()
-layout = QGridLayout()
-screen.setLayout(layout)
+        self.button = QPushButton()
+        self.button.setText('Upload video')
 
-inp_video = QLabel()
-inp_video.setText('Input: ')
-layout.addWidget(inp_video, 0, 0)
+        self.au_button = QPushButton()
+        self.au_button.setText('Extract Emotions')
 
-model_output = QLabel()
-model_output.setText('Output: ')
-layout.addWidget(model_output, 0, 1)
+        self.model_output = QLabel()
+        self.model_output.setText('Output: ')
 
-button = QPushButton()
-button.setText('Upload video')
+        self.errorLabel = QLabel()
+        self.errorLabel.setSizePolicy(QSizePolicy.Preferred,
+                QSizePolicy.Maximum)
 
-def open_file():
-    path = QFileDialog.getOpenFileName(
-        window, # parent widget
-        'Video', # window title
-        '', # entry label
-        'All Files (*.*)'
-    )
-    if path != ('', ''):
-        inp_video.setText('Input: {}%'.format(path[0]))
+        self.au_button.clicked.connect(self.action_unit)
+        self.button.clicked.connect(self.open_file)
 
-button.clicked.connect(open_file)
-layout.addWidget(button, 1, 0, 1, 2)
+        layout.addWidget(self.inp_video, 0, 0)
+        layout.addWidget(self.model_output, 0, 1)
+        layout.addWidget(self.button, 1, 0, 1, 2)
+        layout.addWidget(self.au_button, 2, 0, 1, 2)
+        layout.addWidget(self.errorLabel)
+
+    def open_file(self):
+        path = QFileDialog.getOpenFileNames(
+            self, # parent widget
+            'Video', # window title
+            '', # entry label
+            'All Files (*.*)'
+        )
+        self.filenames = path[0]
+        if path != ('', ''):
+            self.inp_video.setText('Input: {}%'.format(','.join(path[0])))
+
+    def action_unit(self):
+        if self.filenames == []:
+            self.errorLabel.setText("Error: Input video first")
+        else:
+            subprocess.run("/home/sunidhi/Desktop/zurichproj/OpenFace/build/bin/FaceLandmarkVidMulti -verbose -aus -pose -gaze -f \"{}\"".format('\" -f \"'.join(self.filenames)), shell = True)
 
 
-window.setCentralWidget(screen)
-window.setWindowTitle('Emotion inference')
-window.setMinimumSize(500, 200)
-window.show()
+if __name__ == '__main__':
 
-app.exec_()
+    app = QApplication([])
+    window = QMainWindow()
+
+    screen = QWidget()
+    layout = QGridLayout()
+    screen.setLayout(layout)
+
+    player = VideoWindow(window)
+    # player.resize(640, 480)
+    # player.show()
+
+
+    window.setCentralWidget(screen)
+    window.setWindowTitle('Emotion inference')
+    window.setMinimumSize(500, 200)
+    window.show()
+
+    app.exec_()
