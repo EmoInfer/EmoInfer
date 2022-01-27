@@ -9,7 +9,7 @@ class VideoWindow(QMainWindow):
         super(VideoWindow, self).__init__(parent)
         self.inp_video = QLabel()
         self.inp_video.setText('Input: ')
-        self.filename = ''
+        self.filenames = []
 
         self.button = QPushButton()
         self.button.setText('Upload video')
@@ -48,8 +48,20 @@ class VideoWindow(QMainWindow):
         if self.filenames == []:
             self.errorLabel.setText("Error: Input video first")
         else:
-            subprocess.run("/home/sunidhi/Desktop/zurichproj/OpenFace/build/bin/FaceLandmarkVidMulti -verbose -aus -pose -gaze -f \"{}\"".format('\" -f \"'.join(self.filenames)), shell = True)
+            subprocess.run("/home/sunidhi/Desktop/zurichproj/OpenFace/build/bin/FaceLandmarkVidMulti -vis-track -vis-aus -pose -aus -f \"{}\"".format('\" -f \"'.join(self.filenames)), shell = True)
+            import AUtoEmotion as au
+            import FrequencyAnalysis as freqan
+            for file in self.filenames:
+                filename = file.split("/")[-1]
+                filename = filename.partition(".")[0]
+                # print(filename)
+                arg = "~/Desktop/zurichproj/GUIEmotionAnalysis/processed/{}.csv".format(filename)
+                # print(au.ExtractEmotion(arg))
+                self.emos, extractedpath = au.ExtractEmotion(arg)
+                freqan.FreqAnalysis(extractedpath)
+                # return (res)
 
+# -pose -gaze -verbose
 
 if __name__ == '__main__':
 
