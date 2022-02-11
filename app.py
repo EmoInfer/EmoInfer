@@ -2,36 +2,31 @@
 
 from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QGridLayout, \
   QWidget, QPushButton, QTableWidget, QTableWidgetItem, QInputDialog, QFileDialog, QSizePolicy
+from PyQt5 import uic
+import sys
 import subprocess
 
 class VideoWindow(QMainWindow):
     def __init__(self, parent=None):
         super(VideoWindow, self).__init__(parent)
-        self.inp_video = QLabel()
-        self.inp_video.setText('Input: ')
+        uic.loadUi("app.ui", self)
+
+        self.inp_video = self.findChild(QLabel, "inpvideo")
         self.filenames = []
 
-        self.button = QPushButton()
-        self.button.setText('Upload video')
-
-        self.au_button = QPushButton()
-        self.au_button.setText('Extract Emotions')
-
-        self.model_output = QLabel()
-        self.model_output.setText('Output: ')
-
-        self.errorLabel = QLabel()
+        self.uploadbutton = self.findChild(QPushButton, "uploadbutton")
+        self.removebutton  = self.findChild(QPushButton, "removevideo")
+        self.au_button = self.findChild(QPushButton, "startextract")
+        self.errorLabel = self.findChild(QLabel, "errorlabel")
         self.errorLabel.setSizePolicy(QSizePolicy.Preferred,
                 QSizePolicy.Maximum)
 
         self.au_button.clicked.connect(self.action_unit)
-        self.button.clicked.connect(self.open_file)
+        self.uploadbutton.clicked.connect(self.open_file)
+        self.removebutton.clicked.connect(self.remove_file)
 
-        layout.addWidget(self.inp_video, 0, 0)
-        layout.addWidget(self.model_output, 0, 1)
-        layout.addWidget(self.button, 1, 0, 1, 2)
-        layout.addWidget(self.au_button, 2, 0, 1, 2)
-        layout.addWidget(self.errorLabel)
+        self.show()
+
 
     def open_file(self):
         path = QFileDialog.getOpenFileNames(
@@ -42,7 +37,10 @@ class VideoWindow(QMainWindow):
         )
         self.filenames = path[0]
         if path != ('', ''):
-            self.inp_video.setText('Input: {}%'.format(','.join(path[0])))
+            self.inp_video.setText('Input video(s): {}'.format(','.join([pth.split('/')[-1] for pth in path[0]])))
+    def remove_file(self):
+        self.filenames = []
+        self.inp_video.setText('Input video(s): ')
 
     def action_unit(self):
         if self.filenames == []:
@@ -64,22 +62,6 @@ class VideoWindow(QMainWindow):
 # -pose -gaze -verbose
 
 if __name__ == '__main__':
-
     app = QApplication([])
-    window = QMainWindow()
-
-    screen = QWidget()
-    layout = QGridLayout()
-    screen.setLayout(layout)
-
-    player = VideoWindow(window)
-    # player.resize(640, 480)
-    # player.show()
-
-
-    window.setCentralWidget(screen)
-    window.setWindowTitle('Emotion inference')
-    window.setMinimumSize(500, 200)
-    window.show()
-
+    player = VideoWindow()
     app.exec_()

@@ -17,15 +17,55 @@ def ExtractEmotion(arg):
     emo_df = pd.read_table('~/Desktop/zurichproj/GUIEmotionAnalysis/au_to_emotion.csv', delimiter=',', names=('Emotion', 'Cor', 'Kel', 'Du', 'PhyDes'))
     # print(df)
     # valid when <1000 ppl in video
+
+    emo_df = emo_df.iloc[1: , :]
+
+    df['AU53_c'] = ""
+    df['AU54_c'] = ""
+    df['AU55_c'] = ""
+    df['AU56_c'] = ""
+    # df['AU53_c'] = [1 for item in df['pose_Rx'] if item < -0.25]
+    i = 0
+    for item in df['pose_Rx']:
+    #     print(item)
+        if item < -0.25:
+            df['AU53_c'][i] = 1
+            df['AU54_c'][i] = 0
+        else:
+            if item > 0.25:
+                df['AU54_c'][i] = 1
+                df['AU53_c'][i] = 0
+            else:
+                df['AU54_c'][i] = 0
+                df['AU53_c'][i] = 0
+        i += 1
+
+    i = 0
+    for item in df['pose_Rz']:
+    #     print(item)
+        if item < -0.25:
+            df['AU55_c'][i] = 1
+            df['AU56_c'][i] = 0
+        else:
+            if item > 0.25:
+                df['AU56_c'][i] = 1
+                df['AU55_c'][i] = 0
+            else:
+                df['AU55_c'][i] = 0
+                df['AU56_c'][i] = 0
+        i += 1
+        
+
     df['unique_id'] = df['frame']*1000 + df['face_id']
     # print(df)
-    emo_df = emo_df.iloc[1: , :]
     # emo_df 
 
 
 # # In[13]:
 
-    aus = ['AU01_c',"AU02_c","AU04_c","AU05_c","AU06_c","AU07_c","AU09_c","AU10_c","AU12_c","AU14_c","AU15_c","AU17_c","AU20_c","AU23_c","AU25_c","AU26_c","AU28_c","AU45_c"]
+    # aus = ['AU01_c',"AU02_c","AU04_c","AU05_c","AU06_c","AU07_c","AU09_c","AU10_c","AU12_c","AU14_c","AU15_c","AU17_c","AU20_c","AU23_c","AU25_c","AU26_c","AU28_c","AU45_c"]
+    aus = ['AU01_c',"AU02_c","AU04_c","AU05_c","AU06_c","AU07_c","AU09_c","AU10_c","AU12_c","AU14_c","AU15_c","AU17_c","AU20_c","AU23_c","AU25_c","AU26_c","AU28_c","AU45_c","AU53_c","AU54_c","AU55_c","AU56_c"]
+    
     df['num_faces'] = df['frame'].map(df['frame'].value_counts())
     AUs = [ [] for _ in range(df.shape[0]) ]
 
