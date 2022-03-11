@@ -4,12 +4,13 @@
 # In[11]:
 
 
+# from asyncio.windows_events import None
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import sys
 
-def ExtractEmotion(arg):
+def ExtractEmotion(arg, auint, poserx, poserz):
 # In[12]:
 
     df = pd.read_table(arg, delimiter=',')
@@ -20,6 +21,14 @@ def ExtractEmotion(arg):
 
     emo_df = emo_df.iloc[1: , :]
 
+    if auint is not None:
+        poserxthres = poserx
+        poserzthres = poserz
+    
+    else:
+        poserxthres = 0.25
+        poserzthres = 0.25
+
     df['AU53_c'] = ""
     df['AU54_c'] = ""
     df['AU55_c'] = ""
@@ -28,11 +37,11 @@ def ExtractEmotion(arg):
     i = 0
     for item in df['pose_Rx']:
     #     print(item)
-        if item < -0.25:
+        if item < -poserxthres:
             df['AU53_c'][i] = 1
             df['AU54_c'][i] = 0
         else:
-            if item > 0.25:
+            if item > poserxthres:
                 df['AU54_c'][i] = 1
                 df['AU53_c'][i] = 0
             else:
@@ -43,11 +52,11 @@ def ExtractEmotion(arg):
     i = 0
     for item in df['pose_Rz']:
     #     print(item)
-        if item < -0.25:
+        if item < -poserzthres:
             df['AU55_c'][i] = 1
             df['AU56_c'][i] = 0
         else:
-            if item > 0.25:
+            if item > poserzthres:
                 df['AU56_c'][i] = 1
                 df['AU55_c'][i] = 0
             else:
@@ -65,21 +74,33 @@ def ExtractEmotion(arg):
 
     # aus = ['AU01_c',"AU02_c","AU04_c","AU05_c","AU06_c","AU07_c","AU09_c","AU10_c","AU12_c","AU14_c","AU15_c","AU17_c","AU20_c","AU23_c","AU25_c","AU26_c","AU28_c","AU45_c"]
     aus = ['AU01_c',"AU02_c","AU04_c","AU05_c","AU06_c","AU07_c","AU09_c","AU10_c","AU12_c","AU14_c","AU15_c","AU17_c","AU20_c","AU23_c","AU25_c","AU26_c","AU28_c","AU45_c","AU53_c","AU54_c","AU55_c","AU56_c"]
-    
+    aus_r =  ['AU01_r',"AU02_r","AU04_r","AU05_r","AU06_r","AU07_r","AU09_r","AU10_r","AU12_r","AU14_r","AU15_r","AU17_r","AU20_r","AU23_r","AU25_r","AU26_r","AU28_r","AU45_r","AU53_c","AU54_c","AU55_c","AU56_c"]
     df['num_faces'] = df['frame'].map(df['frame'].value_counts())
     AUs = [ [] for _ in range(df.shape[0]) ]
 
     for i in range(df.shape[0]):
-        for au in aus:
+        for j in range(len(aus)):
     #         print(au)
     #         print(i)
     #         print(df2.iloc[i][au])
-            if df.iloc[i][au] >= 1:
-    #             print('here')
-                string = au[2] + au[3]
-        #             print(string)
-                AUs[i] = np.append(AUs[i],str(int(string)))
-    #             print(AUs[i])
+            if auint is None:
+                if df.iloc[i][aus[j]] >= 1:
+        #             print('here')
+                    string = aus[j][2] + aus[j][3]
+            #             print(string)
+                    AUs[i] = np.append(AUs[i],str(int(string)))
+            else:
+                if (j >= len(aus) - 4) or aus[j] == "AU28_c":
+                    if df.iloc[i][aus[j]] >= 1:
+                        string = aus[j][2] + aus[j][3]
+                        AUs[i] = np.append(AUs[i],str(int(string)))
+                else:
+                    if df.iloc[i][aus_r[j]] >= auint:
+        #             print('here')
+                        string = aus_r[j][2] + aus_r[j][3]
+                #             print(string)
+                        AUs[i] = np.append(AUs[i],str(int(string)))
+        #             print(AUs[i])
         
     for i in range(df.shape[0]):
         AUs[i] = ', '.join(map(str, AUs[i]))
@@ -120,7 +141,7 @@ def ExtractEmotion(arg):
     newdf.to_csv("~/Desktop/zurichproj/GUIEmotionAnalysis/extracted.csv")
     path = "~/Desktop/zurichproj/GUIEmotionAnalysis/extracted.csv"
     # Emostrings
-
+    print("Result saved to {}", path)
     return newdf, path
 
 

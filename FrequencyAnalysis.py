@@ -7,6 +7,16 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import math
+
+def adjacent_values(vals, q1, q3):
+    upper_adjacent_value = q3 + (q3 - q1) * 1.5
+    upper_adjacent_value = np.clip(upper_adjacent_value, q3, vals[-1])
+
+    lower_adjacent_value = q1 - (q3 - q1) * 1.5
+    lower_adjacent_value = np.clip(lower_adjacent_value, vals[0], q1)
+    return lower_adjacent_value, upper_adjacent_value
+
 
 def FreqAnalysis(path):
 # In[164]:
@@ -129,6 +139,51 @@ def FreqAnalysis(path):
 
     plt.show()
 
+    i = 0
+    n_frames = df['frame'].max()
+    # per.replace(np.nan, 0)
+    for emo in emos:
+        c1 = [0 if math.isnan(n) else (n*100)/n_frames for n in per[i]["Cordaro_"]]
+        c2 = [0 if math.isnan(n) else (n*100)/n_frames for n in per[i]["Keltner_"]]
+        c3 = [0 if math.isnan(n) else (n*100)/n_frames for n in per[i]["Du_"]]
+        ## combine these different collections into a list
+        data_to_plot = [c1, c2, c3]
+
+        # Create a figure instance
+        fig = plt.figure()
+
+        # Create an axes instance
+        ax = fig.add_axes([0,0,1,1])
+
+        # Create the boxplot
+        parts = ax.violinplot(data_to_plot, showmeans=False, showmedians=False,
+            showextrema=True)
+    #     ax2.set_title('Customized violin plot')
+    #     parts = ax2.violinplot(
+    #             data, showmeans=False, showmedians=False,
+    #             showextrema=False)
+
+        for pc in parts['bodies']:
+            pc.set_facecolor('#D43F3A')
+            pc.set_edgecolor('black')
+            pc.set_alpha(1)
+
+        quartile1, medians, quartile3 = np.percentile(data_to_plot, [25, 50, 75], axis=1)
+        whiskers = np.array([
+            adjacent_values(sorted_array, q1, q3)
+            for sorted_array, q1, q3 in zip(data_to_plot, quartile1, quartile3)])
+        whiskers_min, whiskers_max = whiskers[:, 0], whiskers[:, 1]
+
+        inds = np.arange(1, len(medians) + 1)
+        ax.scatter(inds, medians, marker='o', color='white', s=30, zorder=3)
+        ax.vlines(inds, quartile1, quartile3, color='k', linestyle='-', lw=5)
+        ax.vlines(inds, whiskers_min, whiskers_max, color='k', linestyle='-', lw=1)
+        plt.ylim(0, 100)
+        plt.title(emo)
+        # plt.xlabel("Cordaro, Keltner, Du")
+        # plt.ylabel("percentage")
+        plt.show()
+        i += 1
 
 # In[ ]:
 
