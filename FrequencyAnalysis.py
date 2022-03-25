@@ -18,7 +18,7 @@ def adjacent_values(vals, q1, q3):
     return lower_adjacent_value, upper_adjacent_value
 
 
-def FreqAnalysis(path):
+def FreqAnalysis(path, paper, emotion):
 # In[164]:
     df = pd.read_table(path, delimiter=',')
     df.fillna('', inplace=True)
@@ -95,13 +95,16 @@ def FreqAnalysis(path):
 
     # plt.bar([2,4,6,8,10],[8,6,2,5,6], label="Example two", color='g')
     # plt.legend(loc = 7, bbox_to_anchor=(1.5, 0.5))
+    pap = "Cordaro et al., 2018"
     plt.legend(loc='best')
     plt.ylabel('# of frames x # of faces')
     plt.xlabel('Emotion')
 
-    plt.title('Cordaro et. al')
+    plt.title('Cordaro et al.')
 
-    plt.show()
+    # plt.show()
+    if paper == pap:
+        plt.savefig(f"{pap}.png")
 
     plt.figure()
     i = 0
@@ -111,16 +114,18 @@ def FreqAnalysis(path):
         plt.bar([i+1],[per[i]['Keltner_'].sum()], label=emo)
         i += 1
     #     plt.bar()
-
+    pap = "Keltner et al., 2019"
     # plt.bar([2,4,6,8,10],[8,6,2,5,6], label="Example two", color='g')
     # plt.legend(loc = 7, bbox_to_anchor=(1.5, 0.5))
     plt.legend(loc='best')
     plt.ylabel('# of frames x # of faces')
     plt.xlabel('Emotion')
 
-    plt.title('Keltner et. al')
+    plt.title('Keltner et al.')
 
-    plt.show()
+    # plt.show()
+    if paper == pap:
+        plt.savefig(f"{pap}.png")
 
     plt.figure()
     i = 0
@@ -128,26 +133,75 @@ def FreqAnalysis(path):
         plt.bar([i+1],[per[i]['Du_'].sum()], label=emo)
         i += 1
     #     plt.bar()
-
+    pap = "Du et al., 2014"
     # plt.bar([2,4,6,8,10],[8,6,2,5,6], label="Example two", color='g')
     # plt.legend(loc = 7, bbox_to_anchor=(1.95, 0.5), ncol = 2)
     plt.legend(loc='best')
     plt.ylabel('# of frames x # of faces')
     plt.xlabel('Emotion')
 
-    plt.title('Du et. al')
+    plt.title('Du et al.')
 
-    plt.show()
+    # plt.show()
+    if paper == pap:
+        plt.savefig(f"{pap}.png")
 
-    i = 0
+    # i = 0
     n_frames = df['frame'].max()
     # per.replace(np.nan, 0)
+    # for emo in emos:
+    #     c1 = [0 if math.isnan(n) else (n*100)/n_frames for n in per[i]["Cordaro_"]]
+    #     c2 = [0 if math.isnan(n) else (n*100)/n_frames for n in per[i]["Keltner_"]]
+    #     c3 = [0 if math.isnan(n) else (n*100)/n_frames for n in per[i]["Du_"]]
+    #     ## combine these different collections into a list
+    #     data_to_plot = [c1, c2, c3]
+
+    #     # Create a figure instance
+    #     fig = plt.figure()
+
+    #     # Create an axes instance
+    #     ax = fig.add_axes([0,0,1,1])
+
+    #     # Create the boxplot
+    #     parts = ax.violinplot(data_to_plot, showmeans=False, showmedians=False,
+    #         showextrema=True)
+    # #     ax2.set_title('Customized violin plot')
+    # #     parts = ax2.violinplot(
+    # #             data, showmeans=False, showmedians=False,
+    # #             showextrema=False)
+
+    #     for pc in parts['bodies']:
+    #         pc.set_facecolor('#D43F3A')
+    #         pc.set_edgecolor('black')
+    #         pc.set_alpha(1)
+
+    #     quartile1, medians, quartile3 = np.percentile(data_to_plot, [25, 50, 75], axis=1)
+    #     whiskers = np.array([
+    #         adjacent_values(sorted_array, q1, q3)
+    #         for sorted_array, q1, q3 in zip(data_to_plot, quartile1, quartile3)])
+    #     whiskers_min, whiskers_max = whiskers[:, 0], whiskers[:, 1]
+
+    #     inds = np.arange(1, len(medians) + 1)
+    #     ax.scatter(inds, medians, marker='o', color='white', s=30, zorder=3)
+    #     ax.vlines(inds, quartile1, quartile3, color='k', linestyle='-', lw=5)
+    #     ax.vlines(inds, whiskers_min, whiskers_max, color='k', linestyle='-', lw=1)
+    #     plt.ylim(0, 100)
+    #     plt.title(emo)
+    #     plt.xlabel("Cordaro, Keltner, Du")
+    #     plt.ylabel("percentage")
+    #     plt.show()
+    #     i += 1
+    i = 0
+# per.replace(np.nan, 0)
     for emo in emos:
         c1 = [0 if math.isnan(n) else (n*100)/n_frames for n in per[i]["Cordaro_"]]
         c2 = [0 if math.isnan(n) else (n*100)/n_frames for n in per[i]["Keltner_"]]
         c3 = [0 if math.isnan(n) else (n*100)/n_frames for n in per[i]["Du_"]]
         ## combine these different collections into a list
-        data_to_plot = [c1, c2, c3]
+        data_to_plot1 = [c1]
+        pap = "Cordaro et al., 2018"
+    #     data_to_plot2 = [c2]
+    #     data_to_plot3 = [c3]
 
         # Create a figure instance
         fig = plt.figure()
@@ -156,22 +210,21 @@ def FreqAnalysis(path):
         ax = fig.add_axes([0,0,1,1])
 
         # Create the boxplot
-        parts = ax.violinplot(data_to_plot, showmeans=False, showmedians=False,
-            showextrema=True)
+        parts = ax.violinplot(data_to_plot1, showmeans=False, showmedians=False, showextrema=True)
     #     ax2.set_title('Customized violin plot')
     #     parts = ax2.violinplot(
     #             data, showmeans=False, showmedians=False,
     #             showextrema=False)
-
+    #D43F3A
         for pc in parts['bodies']:
-            pc.set_facecolor('#D43F3A')
+            pc.set_facecolor('white')
             pc.set_edgecolor('black')
             pc.set_alpha(1)
 
-        quartile1, medians, quartile3 = np.percentile(data_to_plot, [25, 50, 75], axis=1)
+        quartile1, medians, quartile3 = np.percentile(data_to_plot1, [25, 50, 75], axis=1)
         whiskers = np.array([
             adjacent_values(sorted_array, q1, q3)
-            for sorted_array, q1, q3 in zip(data_to_plot, quartile1, quartile3)])
+            for sorted_array, q1, q3 in zip(data_to_plot1, quartile1, quartile3)])
         whiskers_min, whiskers_max = whiskers[:, 0], whiskers[:, 1]
 
         inds = np.arange(1, len(medians) + 1)
@@ -179,12 +232,134 @@ def FreqAnalysis(path):
         ax.vlines(inds, quartile1, quartile3, color='k', linestyle='-', lw=5)
         ax.vlines(inds, whiskers_min, whiskers_max, color='k', linestyle='-', lw=1)
         plt.ylim(0, 100)
+        plt.xlim(0,2)
         plt.title(emo)
-        # plt.xlabel("Cordaro, Keltner, Du")
-        # plt.ylabel("percentage")
-        plt.show()
-        i += 1
+        plt.xlabel("Experiment Condition")
+        plt.ylabel("percentage")
+        # set style for the axes
+    #     labels = ['A', 'B', 'C', 'D']
+    #     for ax in [ax1, ax2]:
+    #         set_axis_style(ax, labels)
 
+    #     plt.subplots_adjust(bottom=0.15, wspace=0.05)
+        # plt.show()
+        if pap == paper and emo == emotion:
+            plt.savefig(f"{pap}{emotion}.png")
+        
+    #     plt.show()
+        i += 1
+    i = 0
+    for emo in emos:
+        c1 = [0 if math.isnan(n) else (n*100)/n_frames for n in per[i]["Cordaro_"]]
+        c2 = [0 if math.isnan(n) else (n*100)/n_frames for n in per[i]["Keltner_"]]
+        c3 = [0 if math.isnan(n) else (n*100)/n_frames for n in per[i]["Du_"]]
+        ## combine these different collections into a list
+        data_to_plot1 = [c2]
+        pap = "Keltner et al., 2019"
+    #     data_to_plot2 = [c2]
+    #     data_to_plot3 = [c3]
+
+        # Create a figure instance
+        fig = plt.figure()
+
+        # Create an axes instance
+        ax = fig.add_axes([0,0,1,1])
+
+        # Create the boxplot
+        parts = ax.violinplot(data_to_plot1, showmeans=False, showmedians=False, showextrema=True)
+    #     ax2.set_title('Customized violin plot')
+    #     parts = ax2.violinplot(
+    #             data, showmeans=False, showmedians=False,
+    #             showextrema=False)
+    #D43F3A
+        for pc in parts['bodies']:
+            pc.set_facecolor('white')
+            pc.set_edgecolor('black')
+            pc.set_alpha(1)
+
+        quartile1, medians, quartile3 = np.percentile(data_to_plot1, [25, 50, 75], axis=1)
+        whiskers = np.array([
+            adjacent_values(sorted_array, q1, q3)
+            for sorted_array, q1, q3 in zip(data_to_plot1, quartile1, quartile3)])
+        whiskers_min, whiskers_max = whiskers[:, 0], whiskers[:, 1]
+
+        inds = np.arange(1, len(medians) + 1)
+        ax.scatter(inds, medians, marker='o', color='white', s=30, zorder=3)
+        ax.vlines(inds, quartile1, quartile3, color='k', linestyle='-', lw=5)
+        ax.vlines(inds, whiskers_min, whiskers_max, color='k', linestyle='-', lw=1)
+        plt.ylim(0, 100)
+        plt.xlim(0,2)
+        plt.title(emo)
+        plt.xlabel("Experiment Condition")
+        plt.ylabel("percentage")
+        # set style for the axes
+    #     labels = ['A', 'B', 'C', 'D']
+    #     for ax in [ax1, ax2]:
+    #         set_axis_style(ax, labels)
+
+    #     plt.subplots_adjust(bottom=0.15, wspace=0.05)
+        # plt.show()
+        if pap == paper and emo == emotion:
+            plt.savefig(f"{pap}{emotion}.png")
+        
+    #     plt.show()
+        i += 1
+    i = 0
+    for emo in emos:
+        c1 = [0 if math.isnan(n) else (n*100)/n_frames for n in per[i]["Cordaro_"]]
+        c2 = [0 if math.isnan(n) else (n*100)/n_frames for n in per[i]["Keltner_"]]
+        c3 = [0 if math.isnan(n) else (n*100)/n_frames for n in per[i]["Du_"]]
+        ## combine these different collections into a list
+        data_to_plot1 = [c3]
+        pap = "Du et al., 2014"
+    #     data_to_plot2 = [c2]
+    #     data_to_plot3 = [c3]
+
+        # Create a figure instance
+        fig = plt.figure()
+
+        # Create an axes instance
+        ax = fig.add_axes([0,0,1,1])
+
+        # Create the boxplot
+        parts = ax.violinplot(data_to_plot1, showmeans=False, showmedians=False, showextrema=True)
+    #     ax2.set_title('Customized violin plot')
+    #     parts = ax2.violinplot(
+    #             data, showmeans=False, showmedians=False,
+    #             showextrema=False)
+    #D43F3A
+        for pc in parts['bodies']:
+            pc.set_facecolor('white')
+            pc.set_edgecolor('black')
+            pc.set_alpha(1)
+
+        quartile1, medians, quartile3 = np.percentile(data_to_plot1, [25, 50, 75], axis=1)
+        whiskers = np.array([
+            adjacent_values(sorted_array, q1, q3)
+            for sorted_array, q1, q3 in zip(data_to_plot1, quartile1, quartile3)])
+        whiskers_min, whiskers_max = whiskers[:, 0], whiskers[:, 1]
+
+        inds = np.arange(1, len(medians) + 1)
+        ax.scatter(inds, medians, marker='o', color='white', s=30, zorder=3)
+        ax.vlines(inds, quartile1, quartile3, color='k', linestyle='-', lw=5)
+        ax.vlines(inds, whiskers_min, whiskers_max, color='k', linestyle='-', lw=1)
+        plt.ylim(0, 100)
+        plt.xlim(0,2)
+        plt.title(emo)
+        plt.xlabel("Experiment Condition")
+        plt.ylabel("percentage")
+        # set style for the axes
+    #     labels = ['A', 'B', 'C', 'D']
+    #     for ax in [ax1, ax2]:
+    #         set_axis_style(ax, labels)
+
+    #     plt.subplots_adjust(bottom=0.15, wspace=0.05)
+        # plt.show()
+        if pap == paper and emo == emotion:
+            plt.savefig(f"{pap}{emotion}.png")
+        
+    #     plt.show()
+        i += 1
 # In[ ]:
 
 
