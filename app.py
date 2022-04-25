@@ -1,8 +1,8 @@
 #app exec file
 
 # from asyncio.windows_events import None
-from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QGridLayout, \
-  QWidget, QPushButton, QTableWidget, QTableWidgetItem, QInputDialog, QFileDialog, QSizePolicy, QScrollArea, QDoubleSpinBox, QHBoxLayout, QComboBox
+from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QGridLayout, QStyle, \
+  QWidget, QPushButton, QTableWidget, QTableWidgetItem, QInputDialog, QFileDialog, QSizePolicy, QScrollArea, QDoubleSpinBox, QHBoxLayout, QComboBox, QSlider
 from PyQt5.QtMultimediaWidgets import QVideoWidget
 from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer
 from PyQt5 import uic, QtCore
@@ -22,10 +22,19 @@ class VideoWindow(QMainWindow):
         self.uploadbutton = self.findChild(QPushButton, "uploadbutton")
         self.removebutton  = self.findChild(QPushButton, "removevideo")
         self.progress = self.findChild(QLabel, "status")
+        self.playBtn = self.findChild(QPushButton,"play")
+        self.slider = self.findChild(QSlider,"slider")
+
+        self.playBtn.setEnabled(False)
+        self.playBtn.setIcon(self.style().standardIcon(QStyle.SP_MediaPlay))
+        self.playBtn.clicked.connect(self.play_video)
+        self.slider.setRange(0,0)
+        self.slider.sliderMoved.connect(self.set_position)
+
 
         self.vidwidget = self.findChild(QVideoWidget,"vidplayer" )
         self.vidplayer = QMediaPlayer(None, QMediaPlayer.VideoSurface)
-        
+        self.vidplayer.setVideoOutput(self.vidwidget)
 
         self.start_extract_bin = self.findChild(QPushButton, "startextractbin")
         self.start_extract_con = self.findChild(QPushButton, "startextractcon")
@@ -76,6 +85,9 @@ class VideoWindow(QMainWindow):
         self.continuous.clicked.connect(self.unhide_con)
         self.indanalysis.clicked.connect(self.ind_analysis)
 
+        self.vidplayer.stateChanged.connect(self.mediastate_changed)
+        self.vidplayer.positionChanged.connect(self.position_changed)
+        self.vidplayer.durationChanged.connect(self.duration_changed)
 
 
         self.bin_hidden = True
@@ -86,6 +98,39 @@ class VideoWindow(QMainWindow):
         self.start_extract_bin.hide()
         self.spinboxes.hide()
         self.start_extract_con.hide()
+
+    def play_video(self):
+        if self.vidplayer.state() == QMediaPlayer.PlayingState:
+            self.vidplayer.pause()
+ 
+        else:
+            self.vidplayer.play()
+ 
+ 
+    def mediastate_changed(self, state):
+        if self.vidplayer.state() == QMediaPlayer.PlayingState:
+            self.playBtn.setIcon(
+                self.style().standardIcon(QStyle.SP_MediaPause)
+ 
+            )
+ 
+        else:
+            self.playBtn.setIcon(
+                self.style().standardIcon(QStyle.SP_MediaPlay)
+ 
+            )
+ 
+    def position_changed(self, position):
+        self.slider.setValue(position)
+ 
+ 
+    def duration_changed(self, duration):
+        self.slider.setRange(0, duration)
+ 
+ 
+    def set_position(self, position):
+        self.vidplayer.setPosition(position)
+ 
 
     def unhide_bin(self):
         if self.bin_hidden:
@@ -129,8 +174,8 @@ class VideoWindow(QMainWindow):
         if path != ('', ''):
             self.inp_video.setText('Input video(s): {}'.format(','.join([pth.split('/')[-1] for pth in path[0]])))
             self.vidplayer.setMedia(QMediaContent(QtCore.QUrl.fromLocalFile(self.filenames[0])))
-            self.vidplayer.setVideoOutput(self.vidwidget)
-            self.vidplayer.play()
+            # self.vidplayer.setVideoOutput(self.vidwidget)
+            self.playBtn.setEnabled(True)
         self.errorLabel.hide()
         
     def remove_file(self):
@@ -157,7 +202,8 @@ class VideoWindow(QMainWindow):
             self.errorLabel.setText("Error: Input video first")
         else:
             # self.progress.setText("Extracting Emotions...")
-            subprocess.run("/home/sunidhi/Desktop/zurichproj/OpenFace/build/bin/FaceLandmarkVidMulti -vis-track -vis-aus -pose -aus -f \"{}\"".format('\" -f \"'.join(self.filenames)), shell = True)
+            # -vis-track -vis-aus
+            subprocess.run("/home/sunidhi/Desktop/zurichproj/OpenFace/build/bin/FaceLandmarkVidMulti -pose -aus -f \"{}\"".format('\" -f \"'.join(self.filenames)), shell = True)
             import AUtoEmotion as au
             i = 0
             for file in self.filenames:

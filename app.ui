@@ -1027,7 +1027,7 @@ p, li { white-space: pre-wrap; }
        <item>
         <widget class="QLabel" name="label_22">
          <property name="text">
-          <string>minimum time interval (successive sequences):</string>
+          <string>minimum time interval (successive itemsets):</string>
          </property>
          <property name="wordWrap">
           <bool>true</bool>
@@ -1047,7 +1047,7 @@ p, li { white-space: pre-wrap; }
        <item>
         <widget class="QLabel" name="label_23">
          <property name="text">
-          <string>maximum time interval (successive sequences):</string>
+          <string>maximum time interval (successive itemsets):</string>
          </property>
          <property name="wordWrap">
           <bool>true</bool>
@@ -1067,7 +1067,7 @@ p, li { white-space: pre-wrap; }
        <item>
         <widget class="QLabel" name="label_24">
          <property name="text">
-          <string>minimum time interval (first and last sequences):</string>
+          <string>minimum time interval (first and last itemsets):</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>
@@ -1090,7 +1090,7 @@ p, li { white-space: pre-wrap; }
        <item>
         <widget class="QLabel" name="label_25">
          <property name="text">
-          <string>maximum time interval (first and last sequences):</string>
+          <string>maximum time interval (first and last itemsets):</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>
@@ -1254,9 +1254,41 @@ p, li { white-space: pre-wrap; }
       <x>40</x>
       <y>40</y>
       <width>291</width>
-      <height>191</height>
+      <height>151</height>
      </rect>
     </property>
+   </widget>
+   <widget class="QWidget" name="horizontalLayoutWidget_3">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>190</y>
+      <width>291</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QPushButton" name="play">
+       <property name="maximumSize">
+        <size>
+         <width>25</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSlider" name="slider">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
