@@ -11,6 +11,8 @@ import sys
 import subprocess
 import time
 
+OpenFacePath = "/home/sunidhi/Desktop/zurichproj/OpenFace"
+
 class VideoWindow(QMainWindow):
     def __init__(self, parent=None):
         super(VideoWindow, self).__init__(parent)
@@ -203,14 +205,14 @@ class VideoWindow(QMainWindow):
         else:
             # self.progress.setText("Extracting Emotions...")
             # -vis-track -vis-aus
-            subprocess.run("/home/sunidhi/Desktop/zurichproj/OpenFace/build/bin/FaceLandmarkVidMulti -pose -aus -f \"{}\"".format('\" -f \"'.join(self.filenames)), shell = True)
+            subprocess.run(OpenFacePath + "/build/bin/FaceLandmarkVidMulti -pose -aus -vis-track -vis-aus -f \"{}\"".format('\" -f \"'.join(self.filenames)), shell = True)
             import AUtoEmotion as au
             i = 0
             for file in self.filenames:
                 filename = file.split("/")[-1]
                 filename = filename.partition(".")[0]
                 # print(filename)
-                arg = "~/Desktop/zurichproj/GUIEmotionAnalysis/processed/{}.csv".format(filename)
+                arg = "processed/{}.csv".format(filename)
                 # print(au.ExtractEmotion(arg))
                 self.emos, self.extractedpath[i] = au.ExtractEmotion(arg, None, None, None)
                 # freqan.FreqAnalysis(extractedpath)
@@ -224,14 +226,14 @@ class VideoWindow(QMainWindow):
             self.errorLabel.setText("Error: Input video first")
         else:
             # self.progress.setText("Extracting Emotions...")
-            subprocess.run("/home/sunidhi/Desktop/zurichproj/OpenFace/build/bin/FaceLandmarkVidMulti -vis-track -vis-aus -pose -aus -f \"{}\"".format('\" -f \"'.join(self.filenames)), shell = True)
+            subprocess.run(OpenFacePath + "/build/bin/FaceLandmarkVidMulti -vis-track -vis-aus -pose -aus -f \"{}\"".format('\" -f \"'.join(self.filenames)), shell = True)
             import AUtoEmotion as au
             i = 0
             for file in self.filenames:
                 filename = file.split("/")[-1]
                 filename = filename.partition(".")[0]
                 # print(filename)
-                arg = "~/Desktop/zurichproj/GUIEmotionAnalysis/processed/{}.csv".format(filename)
+                arg = "processed/{}.csv".format(filename)
                 # print(au.ExtractEmotion(arg))
                 self.emos, self.extractedpath[i] = au.ExtractEmotion(arg, self.AUint.value(), self.poserx.value(), self.poserz.value())
                 i += 1

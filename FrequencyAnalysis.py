@@ -23,7 +23,7 @@ def FreqAnalysis(path, paper, emotion):
     df = pd.read_table(path, delimiter=',')
     df.fillna('', inplace=True)
     # print(df)
-    emo_df = pd.read_table('~/Desktop/zurichproj/GUIEmotionAnalysis/au_to_emotion.csv', delimiter=',', names=('Emotion', 'Cor', 'Kel', 'Du', 'PhyDes'))
+    emo_df = pd.read_table('au_to_emotion.csv', delimiter=',', names=('Emotion', 'Cor', 'Kel', 'Du', 'PhyDes'))
     emo_df = emo_df.iloc[1: , :]
     emos = pd.array(emo_df['Emotion'], dtype="string")
 

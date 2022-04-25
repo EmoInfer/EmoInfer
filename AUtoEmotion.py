@@ -15,7 +15,7 @@ def ExtractEmotion(arg, auint, poserx, poserz):
 
     df = pd.read_table(arg, delimiter=',')
 
-    emo_df = pd.read_table('~/Desktop/zurichproj/GUIEmotionAnalysis/au_to_emotion.csv', delimiter=',', names=('Emotion', 'Cor', 'Kel', 'Du', 'PhyDes'))
+    emo_df = pd.read_table('au_to_emotion.csv', delimiter=',', names=('Emotion', 'Cor', 'Kel', 'Du', 'PhyDes'))
     # print(df)
     # valid when <1000 ppl in video
 
@@ -138,8 +138,8 @@ def ExtractEmotion(arg, auint, poserx, poserz):
     dat = zip(df.frame, df.face_id, Cor, Kel, Du)
     newdf = pd.DataFrame(dat, columns = ['frame', 'face_id','Cordaro', 'Keltner', 'Du'])
     # print(newdf)
-    newdf.to_csv("~/Desktop/zurichproj/GUIEmotionAnalysis/extracted.csv")
-    path = "~/Desktop/zurichproj/GUIEmotionAnalysis/extracted.csv"
+    newdf.to_csv("extracted.csv")
+    path = "extracted.csv"
     # Emostrings
     print("Result saved to {}", path)
     return newdf, path
