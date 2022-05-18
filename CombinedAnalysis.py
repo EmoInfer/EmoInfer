@@ -18,19 +18,41 @@ def adjacent_values(vals, q1, q3):
     return lower_adjacent_value, upper_adjacent_value
 
 
-def FreqAnalysis(filename, path, paper, emotion):
+def CombFreqAnalysis(filenames, n_videos):
 # In[164]:
-    df = pd.read_table(path, delimiter=',')
-    df.fillna('', inplace=True)
-    # print(df)
+    # df = pd.read_table(path, delimiter=',')
+    # df.fillna('', inplace=True)
+    # # print(df)
+    # emo_df = pd.read_table('au_to_emotion.csv', delimiter=',', names=('Emotion', 'Cor', 'Kel', 'Du', 'PhyDes'))
+    # emo_df = emo_df.iloc[1: , :]
+    # emos = pd.array(emo_df['Emotion'], dtype="string")
+
+    # n_videos no. of videos 
+    # n_videos = 2
+    filename = "".join(filenames)
+    dfs = []
+    for i in range(n_videos):
+        df = pd.read_table('extracted/extracted_{}.csv'.format(filenames[i]), delimiter=',')
+        df.fillna('', inplace=True)
+        # print(df)
+        dfs.append(df)
     emo_df = pd.read_table('au_to_emotion.csv', delimiter=',', names=('Emotion', 'Cor', 'Kel', 'Du', 'PhyDes'))
     emo_df = emo_df.iloc[1: , :]
     emos = pd.array(emo_df['Emotion'], dtype="string")
+    combined_df = pd.DataFrame()
+    fac = 0
+    for i in range(n_videos):
+        fcs = dfs[i]['face_id'].max() + 1
+        dfs[i]['face_id'] = dfs[i]['face_id'] + fac
+        fac = fac + fcs
+        # print(dfs[i])
+        combined_df = combined_df.append(dfs[i])
+        
+    # print(combined_df)
 
-    n_faces = df['face_id'].max() + 1
-
+    df = combined_df
     # In[165]:
-
+    n_faces = df['face_id'].max() + 1
 
     # df2 = df.groupby('face_id')
     # print(df)
@@ -394,7 +416,7 @@ def FreqAnalysis(filename, path, paper, emotion):
             
     # currently saving all images in results
             # if pap == paper and emo == emotion:
-        plt.savefig(f"images/{pap}{emo}_{filename}.png", bbox_inches='tight')
+        fig.savefig(f"images/{pap}{emo}_{filename}.png", bbox_inches='tight')
         plt.close(fig)
     #     plt.show()
         i += 1

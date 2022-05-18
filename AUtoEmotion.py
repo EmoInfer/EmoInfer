@@ -10,7 +10,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import sys
 
-def ExtractEmotion(arg, auint, poserx, poserz):
+def ExtractEmotion(arg, filename, auint, poserx, poserz):
 # In[12]:
 
     df = pd.read_table(arg, delimiter=',')
@@ -138,8 +138,8 @@ def ExtractEmotion(arg, auint, poserx, poserz):
     dat = zip(df.frame, df.face_id, Cor, Kel, Du)
     newdf = pd.DataFrame(dat, columns = ['frame', 'face_id','Cordaro', 'Keltner', 'Du'])
     # print(newdf)
-    newdf.to_csv("extracted.csv")
-    path = "extracted.csv"
+    newdf.to_csv("extracted/extracted_{}.csv".format(filename))
+    path = "extracted/extracted_{}.csv".format(filename)
     # Emostrings
     print("Result saved to {}", path)
     return newdf, path
