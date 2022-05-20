@@ -4,17 +4,15 @@ We offer _EmoInfer_ as a tool to accelerate process-based research on emotions i
 
 ## Installation
 
-**Dependencies:** To run _EmoInfer_, 
-* OpenFace must be installed. Please find installation instructions [here](https://github.com/TadasBaltrusaitis/OpenFace/wiki#installation).
-* PyQt5 should be installed. Please find installation instructions [here](https://pypi.org/project/PyQt5/).
-* QtMultimedia should be installed. Please find installation instructions [here](https://ports.macports.org/port/qt5-qtmultimedia/).
+**Dependencies:**
+* OpenFace (installation instructions [here](https://github.com/TadasBaltrusaitis/OpenFace/wiki#installation))
+* PyQt5 (installation instructions [here](https://pypi.org/project/PyQt5/))
+* QtMultimedia (installation instructions [here](https://ports.macports.org/port/qt5-qtmultimedia/))
 
 
-To run the app,
-
-1. Go to the _'app.py'_ file and modify the variable _'OpenFacePath'_ to be the path of OpenFace in your local machine.
-
-2. Run the following command in the head directory
+To run _EmoInfer_,
+*Go to the _'app.py'_ file and modify the variable _'OpenFacePath'_ to be the path of OpenFace in your local machine.
+*Run the following command in the head directory
 
 ```python3 app.py```
 
