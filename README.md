@@ -14,9 +14,7 @@ To run _EmoInfer_,
 
 1. Go to the _'app.py'_ file and modify the variable _'OpenFacePath'_ to be the path of OpenFace in your local machine.
 
-2. Run the following command in the head directory
-
-```python3 app.py```
+2. Run the following command ```python3 app.py``` in the head directory 
 
 
 ## Functionality and Use
