@@ -11,8 +11,10 @@ We offer _EmoInfer_ as a tool to accelerate process-based research on emotions i
 
 
 To run _EmoInfer_,
-*Go to the _'app.py'_ file and modify the variable _'OpenFacePath'_ to be the path of OpenFace in your local machine.
-*Run the following command in the head directory
+
+1. Go to the _'app.py'_ file and modify the variable _'OpenFacePath'_ to be the path of OpenFace in your local machine.
+
+2. Run the following command in the head directory
 
 ```python3 app.py```
 
