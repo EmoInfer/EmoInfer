@@ -13,10 +13,25 @@ To run the app,
 
 ```python3 app.py```
 
-**Emotion Extraction:** There are options of binary/continuous extractions in the app and one can toggle the hyperparameters.
-* First, facial action units are detected in the video and saved per frame in a file called _'{filename}.csv'_ in the _'{HEAD}/processed'_ folder.
-* After emotion extraction, a file named _'extracted/extracted.csv'_ is saved in the same directory which has details of the emotions detected in the frame according to 3 coding schemes.
 
-**Analysis:** This enables to statistically analyse the emotions extracted in the video. Images showing resultant graphs are saveed in the head directory itself.Overall statistics of the video according to the coding scheme is saved in _'{coding scheme}.png'_ and the emotion-wise results are saved in _'{coding scheme}{emotion}.png'_.
+**Facial Action Unit Extraction:** _EmoInfer_ provides options of using binary or continuous facial action unit extraction in the app, and one can toggle the hyperparameters. 
+* To incorporate action units 53 (head up) and 54 (head down), the head pose threshold for pitch can set (i.e., the rotation in radians around the X axis; 1 radian = 57.3 deg). 
+* To incorporate action units 55 (head tilt left) and 56 (head tilt right), the head pose threshold for roll can set (i.e., the rotation in radians around the Z axis; 1 radian = 57.3 deg).
+* For continuous facial action units, a cutoff intensity above which a facial action unit is considered active needs to be specified (on a scale of 1 to 5). 
+* Facial action units detected in the uploaded video(s) are saved per frame in a file called _'{filename}.csv'_ in the _'{HEAD}/processed'_ folder.
 
-**Sequencing:** This phase extracts important sequences from emotion sequences occuring in the video. 
+
+**Emotion Inference:** _EmoInfer_ infers emotions from the extracted facial action units, drawing on three culutrally-generalizable coding schemes outlined in [Sinha et al., JLS, 2022](https://www.tandfonline.com/doi/full/10.1080/10508406.2021.1964506)).
+* After emotion extraction, a file named _'extracted/extracted.csv'_ is saved in the same directory, which has the details of the emotions inferred in each frame.
+
+
+**Analysis:** _EmoInfer_ enables statistical analysis of the emotions extracted in the video(s). Images showing resultant graphs are saved in the head directory. Overall statistics of the video relevant to a particular coding scheme are saved in _'{coding scheme}.png'_ and the emotion-specific results are saved in _'{coding scheme}{emotion}.png'_. More details on the analyses possible are outlined in the citation below.
+
+**Sequencing:** _EmoInfer_ also supports extraction of important sequences from the inferred emotions in the video. 
+
+
+# Citation
+
+If you use _EmoInfer_ in of your work and/or publications, we ask you to kindly cite the following work.
+
+Sinha, T., Dhandhania, S. 2022. Democratizing Emotion Research in Learning Sciences. In Proceedings of Artificial Intelligence in Education.
