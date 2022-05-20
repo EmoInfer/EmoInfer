@@ -1,3 +1,5 @@
+_EmoInfer_ is a tool to accelerate process-based research on emotions in the Learning Sciences and help educational stakeholders understand the interplay of cognition and affect in ecologically-valid learning situations. It provides a simple graphical user interface to streamline automatic annotation and analysis of videos with facial expressions of emotion. _EmoInfer_ can be applied to quantify and visualize the frequency and the temporal dynamics of emotions.
+
 # Installation
 
 **Dependencies:** To run _EmoInfer_, 
