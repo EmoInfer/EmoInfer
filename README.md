@@ -23,7 +23,7 @@ To run the app,
 * Facial action units detected in the uploaded video(s) are saved per frame in a file called _'{filename}.csv'_ in the _'{HEAD}/processed'_ folder.
 
 
-**Emotion Inference:** _EmoInfer_ infers emotions from the extracted facial action units, drawing on three culturally-generalizable coding schemes outlined in [Sinha et al., JLS, 2022](https://www.tandfonline.com/doi/full/10.1080/10508406.2021.1964506)).
+**Emotion Inference:** _EmoInfer_ infers emotions from the extracted facial action units, drawing on three culturally-generalizable coding schemes outlined in [Sinha et al., JLS, 2022](https://www.tandfonline.com/doi/full/10.1080/10508406.2021.1964506).
 * After emotion extraction, a file named _'extracted/extracted.csv'_ is saved in the same directory, which has the details of the emotions inferred in each frame.
 
 
@@ -37,9 +37,11 @@ To run the app,
 If you use _EmoInfer_ in your work and/or publications, we ask you to kindly cite the following work(s).
 
 **Overall system**
+
 Sinha, T., Dhandhania, S. 2022. Democratizing emotion research in learning sciences. _In Proceedings of Artificial Intelligence in Education_
 
 **Empirical evidence based on the _EmoInfer_ pipeline**
+
 Sinha, T. 2022. Enriching problem-solving followed by instruction with explanatory accounts of emotions. _Journal of the Learning Sciences_, 31 (2), 151-198, doi: 10.1080/10508406.2021.1964506
 
 
