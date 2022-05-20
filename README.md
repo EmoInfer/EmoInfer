@@ -5,8 +5,9 @@ We offer _EmoInfer_ as a tool to accelerate process-based research on emotions i
 ## Installation
 
 **Dependencies:** To run _EmoInfer_, 
-* [OpenFace](https://github.com/TadasBaltrusaitis/OpenFace/wiki#installation) must be installed on the machine.
-* PyQt5 and QtMultimedia should be installed.
+* OpenFace must be installed. Please find installation instructions [here](https://github.com/TadasBaltrusaitis/OpenFace/wiki#installation).
+* PyQt5 should be installed. Please find installation instructions [here](https://pypi.org/project/PyQt5/).
+* QtMultimedia should be installed. Please find installation instructions [here](https://ports.macports.org/port/qt5-qtmultimedia/).
 
 
 To run the app,
