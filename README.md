@@ -1,6 +1,8 @@
-_EmoInfer_ is a tool to accelerate process-based research on emotions in the Learning Sciences and help educational stakeholders understand the interplay of cognition and affect in ecologically-valid learning situations. It provides a simple graphical user interface to streamline automatic annotation and analysis of videos with facial expressions of emotion. _EmoInfer_ can be applied to quantify and visualize the frequency and the temporal dynamics of emotions.
+# EmoInfer 1.0
 
-# Installation
+We offer _EmoInfer_ as a tool to accelerate process-based research on emotions in the Learning Sciences and help educational stakeholders understand the interplay of cognition and affect in ecologically-valid learning situations. _EmoInfer_ provides a simple graphical user interface to streamline automatic annotation and analysis of videos with facial expressions of emotion. _EmoInfer_ can be applied to quantify and visualize the frequency and the temporal dynamics of emotions.
+
+## Installation
 
 **Dependencies:** To run _EmoInfer_, 
 * [OpenFace](https://github.com/TadasBaltrusaitis/OpenFace/wiki#installation) must be installed on the machine.
@@ -16,9 +18,9 @@ To run the app,
 ```python3 app.py```
 
 
-# Functionality and Use
+## Functionality and Use
 
-**Facial Action Unit Extraction:** _EmoInfer_ provides options of using binary or continuous facial action unit extraction in the app, and one can toggle the hyperparameters. 
+**Facial Action Unit Extraction:** _EmoInfer_ provides options of using binary or continuous facial action unit extraction.
 * To incorporate action units 53 (head up) and 54 (head down), the head pose threshold for pitch can be set (i.e., the rotation in radians around the X axis; 1 radian = 57.3 deg). 
 * To incorporate action units 55 (head tilt left) and 56 (head tilt right), the head pose threshold for roll can be set (i.e., the rotation in radians around the Z axis; 1 radian = 57.3 deg).
 * For continuous facial action units, a cutoff intensity above which a facial action unit is considered active needs to be specified (on a scale of 1 to 5). 
@@ -29,12 +31,15 @@ To run the app,
 * After emotion extraction, a file named _'extracted/extracted.csv'_ is saved in the same directory, which has the details of the emotions inferred in each frame.
 
 
-**Analysis:** _EmoInfer_ enables statistical analyses of the emotions extracted in the video(s). Images showing resultant graphs are saved in the head directory. Overall statistics of the video(s) relevant to a particular coding scheme are saved in _'{coding scheme}.png'_ and the emotion-specific results are saved in _'{coding scheme}{emotion}.png'_. More details on the analyses possible are outlined in the citation below.
+**Analysis:** _EmoInfer_ enables statistical analyses and visualizations of the emotions extracted in the video(s). More details on the analyses possible are outlined in the citation below.
+* Images showing resultant graphs are saved in the head directory. 
+* Overall statistics of the video(s) relevant to a particular coding scheme are saved in _'{coding scheme}.png'_.
+* Emotion-specific results are saved in _'{coding scheme}{emotion}.png'_. 
 
 **Sequencing:** _EmoInfer_ also supports the extraction of important sequences from the inferred emotions in the video. 
 
 
-# Citation
+## Citation
 
 If you use _EmoInfer_ in your work and/or publications, we ask you to kindly cite the following work(s).
 
@@ -47,7 +52,7 @@ Sinha, T., Dhandhania, S. 2022. Democratizing emotion research in learning scien
 Sinha, T. 2022. Enriching problem-solving followed by instruction with explanatory accounts of emotions. _Journal of the Learning Sciences_, 31 (2), 151-198, doi: 10.1080/10508406.2021.1964506
 
 
-# Contact
+## Contact
 
 **Dr. Tanmay Sinha**
 
