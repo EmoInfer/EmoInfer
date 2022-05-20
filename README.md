@@ -32,6 +32,6 @@ To run the app,
 
 # Citation
 
-If you use _EmoInfer_ in of your work and/or publications, we ask you to kindly cite the following work.
+If you use _EmoInfer_ in your work and/or publications, we ask you to kindly cite the following work.
 
 Sinha, T., Dhandhania, S. 2022. Democratizing Emotion Research in Learning Sciences. In Proceedings of Artificial Intelligence in Education.
