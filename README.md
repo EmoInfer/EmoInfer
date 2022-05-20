@@ -19,8 +19,8 @@ To run the app,
 # Functionality and Use
 
 **Facial Action Unit Extraction:** _EmoInfer_ provides options of using binary or continuous facial action unit extraction in the app, and one can toggle the hyperparameters. 
-* To incorporate action units 53 (head up) and 54 (head down), the head pose threshold for pitch can set (i.e., the rotation in radians around the X axis; 1 radian = 57.3 deg). 
-* To incorporate action units 55 (head tilt left) and 56 (head tilt right), the head pose threshold for roll can set (i.e., the rotation in radians around the Z axis; 1 radian = 57.3 deg).
+* To incorporate action units 53 (head up) and 54 (head down), the head pose threshold for pitch can be set (i.e., the rotation in radians around the X axis; 1 radian = 57.3 deg). 
+* To incorporate action units 55 (head tilt left) and 56 (head tilt right), the head pose threshold for roll can be set (i.e., the rotation in radians around the Z axis; 1 radian = 57.3 deg).
 * For continuous facial action units, a cutoff intensity above which a facial action unit is considered active needs to be specified (on a scale of 1 to 5). 
 * Facial action units detected in the uploaded video(s) are saved per frame in a file called _'{filename}.csv'_ in the _'{HEAD}/processed'_ folder.
 
@@ -31,7 +31,7 @@ To run the app,
 
 **Analysis:** _EmoInfer_ enables statistical analyses of the emotions extracted in the video(s). Images showing resultant graphs are saved in the head directory. Overall statistics of the video(s) relevant to a particular coding scheme are saved in _'{coding scheme}.png'_ and the emotion-specific results are saved in _'{coding scheme}{emotion}.png'_. More details on the analyses possible are outlined in the citation below.
 
-**Sequencing:** _EmoInfer_ also supports extraction of important sequences from the inferred emotions in the video. 
+**Sequencing:** _EmoInfer_ also supports the extraction of important sequences from the inferred emotions in the video. 
 
 
 # Citation
