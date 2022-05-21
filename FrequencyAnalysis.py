@@ -244,7 +244,7 @@ def FreqAnalysis(filename, path, paper, emotion):
         ax.vlines(inds, whiskers_min, whiskers_max, color='k', linestyle='-', lw=1)
         plt.ylim(0, 100)
         plt.xlim(0,2)
-        plt.legend(loc='best')
+        # plt.legend(loc='best')
         plt.title(emo)
         plt.xlabel("Experiment Condition")
         plt.ylabel("percentage")
@@ -312,7 +312,7 @@ def FreqAnalysis(filename, path, paper, emotion):
         ax.vlines(inds, whiskers_min, whiskers_max, color='k', linestyle='-', lw=1)
         plt.ylim(0, 100)
         plt.xlim(0,2)
-        plt.legend(loc='best')
+        # plt.legend(loc='best')
         plt.title(emo)
         plt.xlabel("Experiment Condition")
         plt.ylabel("percentage")
@@ -376,9 +376,9 @@ def FreqAnalysis(filename, path, paper, emotion):
         ax.vlines(inds, whiskers_min, whiskers_max, color='k', linestyle='-', lw=1)
         plt.ylim(0, 100)
         plt.xlim(0,2)
-        plt.legend(loc='best')
+        # plt.legend(loc='best')
         if i == 27:
-            plt.title = "Apalled/Hatred"
+            plt.title("Apalled/Hatred")
         else:
             plt.title(emo)
         plt.xlabel("Experiment Condition")

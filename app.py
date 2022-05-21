@@ -2,18 +2,23 @@
 
 # from asyncio.windows_events import None
 from typing_extensions import Self
-from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QGridLayout, QStyle, \
-  QWidget, QPushButton, QTableWidget, QTableWidgetItem, QInputDialog, QFileDialog, QSizePolicy, QScrollArea, QDoubleSpinBox, QHBoxLayout, QComboBox, QSlider
+from PyQt5.QtWidgets import *
+# from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QGridLayout, QStyle, \
+#   QWidget, QPushButton, QTableWidget, QTableWidgetItem, QInputDialog, QFileDialog, QSizePolicy, QScrollArea, QDoubleSpinBox, QHBoxLayout, QComboBox, QSlider
 from PyQt5.QtMultimediaWidgets import QVideoWidget
 from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer
 from PyQt5 import uic, QtCore
-from PyQt5.QtGui import QPixmap
-from PyQt5.QtCore import Qt
-import sys
+from PyQt5.QtGui import *
+from PyQt5.QtCore import *
+import sys, os
 import subprocess
 import time
 
 from CheckableComboBox import CheckableComboBox
+from WorkerThread import WorkerSignals, Worker
+import AUtoEmotion as au
+import FrequencyAnalysis as freqan
+import CombinedAnalysis as coman
 
 OpenFacePath = "/home/sunidhi/Desktop/zurichproj/OpenFace"
 
@@ -25,15 +30,9 @@ class VideoWindow(QMainWindow):
         self.inp_video = self.findChild(QLabel, "inpvideo")
         self.filenames = []
 
-        self.uploadbutton = self.findChild(QPushButton, "uploadbutton")
-        self.removebutton  = self.findChild(QPushButton, "removevideo")
-        self.progress = self.findChild(QLabel, "status")
-        self.playBtn = self.findChild(QPushButton,"play")
-        self.slider = self.findChild(QSlider,"slider")
-
-        self.playBtn.setEnabled(False)
-        self.playBtn.setIcon(self.style().standardIcon(QStyle.SP_MediaPlay))
-        self.playBtn.clicked.connect(self.play_video)
+        self.play.setEnabled(False)
+        self.play.setIcon(self.style().standardIcon(QStyle.SP_MediaPlay))
+        self.play.clicked.connect(self.play_video)
         self.slider.setRange(0,0)
         self.slider.sliderMoved.connect(self.set_position)
 
@@ -42,32 +41,8 @@ class VideoWindow(QMainWindow):
         self.vidplayer = QMediaPlayer(None, QMediaPlayer.VideoSurface)
         self.vidplayer.setVideoOutput(self.vidwidget)
 
-        self.start_extract_bin = self.findChild(QPushButton, "startextractbin")
-        self.start_extract_con = self.findChild(QPushButton, "startextractcon")
-        self.spinboxes = self.findChild(QWidget, "spinboxwidget")
-        self.errorLabel = self.findChild(QLabel, "errorlabel")
-        self.image_au = self.findChild(QLabel, "image_au")
-        self.hyper_area = self.findChild(QScrollArea, "hyperscroll")
-        self.binary = self.findChild(QPushButton,"binary")
-        self.continuous = self.findChild(QPushButton,"cont")
-        self.AUint = self.findChild(QDoubleSpinBox, "AUint")
-        self.poserx = self.findChild(QDoubleSpinBox, "poseRx")
-        self.poserz = self.findChild(QDoubleSpinBox, "poseRx")
-
-        self.indanalysis = self.findChild(QPushButton, "indanalysis")
-        self.comanalysis = self.findChild(QPushButton, "comanalysis")
-        self.paper = self.findChild(QComboBox, "paper")
-        self.emotion = self.findChild(QComboBox, "emotion")
-        self.paperimg = self.findChild(QLabel,"paperimg")
-        self.paperemo = self.findChild(QLabel,"paperemo")
-
         self.videos_wid = CheckableComboBox()
         self.lay_vid.addWidget(self.videos_wid)
-
-        # for i in range(12):
-        #     att = getattr(self, "checkBox_{}".format(i+1))
-        #     att.setHidden(True)
-
 
         self.paper.addItem("Cordaro et al., 2018")
         self.paper.addItem("Keltner et al., 2019")
@@ -88,16 +63,16 @@ class VideoWindow(QMainWindow):
 
         self.paper.currentTextChanged[str].connect(self.set_emo_dropdown)
 
-        self.errorLabel.setSizePolicy(QSizePolicy.Preferred,
+        self.errorlabel.setSizePolicy(QSizePolicy.Preferred,
                 QSizePolicy.Maximum)
         self.image_au.setPixmap(QPixmap("images/AU2.png"))
         self.label_8.setPixmap(QPixmap("images/headpose2.png"))
-        self.start_extract_bin.clicked.connect(self.action_unit_bin)
-        self.start_extract_con.clicked.connect(self.action_unit_con)
+        self.startextractbin.clicked.connect(self.action_unit_bin)
+        self.startextractcon.clicked.connect(self.action_unit_con)
         self.uploadbutton.clicked.connect(self.open_file)
-        self.removebutton.clicked.connect(self.remove_file)
+        self.removevideo.clicked.connect(self.remove_file)
         self.binary.clicked.connect(self.unhide_bin)
-        self.continuous.clicked.connect(self.unhide_con)
+        self.cont.clicked.connect(self.unhide_con)
         self.indanalysis.clicked.connect(self.ind_analysis)
         self.comanalysis.clicked.connect(self.com_analysis)
         self.show_analysis_fig.clicked.connect(self.show_analysis_figures)
@@ -115,9 +90,12 @@ class VideoWindow(QMainWindow):
         self.extractedpath = [""]*1000
 
         self.show()
-        self.start_extract_bin.hide()
-        self.spinboxes.hide()
-        self.start_extract_con.hide()
+        self.startextractbin.hide()
+        self.spinboxwidget.hide()
+        self.startextractcon.hide()
+        self.threadpool = QThreadPool()
+        print("Multithreading with maximum %d threads" % self.threadpool.maxThreadCount())
+
 
     def play_video(self):
         if self.vidplayer.state() == QMediaPlayer.PlayingState:
@@ -129,13 +107,13 @@ class VideoWindow(QMainWindow):
  
     def mediastate_changed(self, state):
         if self.vidplayer.state() == QMediaPlayer.PlayingState:
-            self.playBtn.setIcon(
+            self.play.setIcon(
                 self.style().standardIcon(QStyle.SP_MediaPause)
  
             )
  
         else:
-            self.playBtn.setIcon(
+            self.play.setIcon(
                 self.style().standardIcon(QStyle.SP_MediaPlay)
  
             )
@@ -162,33 +140,33 @@ class VideoWindow(QMainWindow):
 
     def unhide_bin(self):
         if self.bin_hidden:
-            self.start_extract_bin.show()
+            self.startextractbin.show()
             self.bin_hidden = False
             self.hide_con()
-        self.errorLabel.hide()
+        self.errorlabel.hide()
     
     def unhide_con(self):
         if self.con_hidden:
-            # self.hyper_area.show()
-            self.spinboxes.show()
-            self.start_extract_con.show()
+            # self.hyperscroll.show()
+            self.spinboxwidget.show()
+            self.startextractcon.show()
             self.con_hidden = False
             self.hide_bin()
-        self.errorLabel.hide()
+        self.errorlabel.hide()
     
     def hide_bin(self):
         if self.bin_hidden == False:
-            self.start_extract_bin.hide()
+            self.startextractbin.hide()
             self.bin_hidden = True
-        self.errorLabel.hide()
+        self.errorlabel.hide()
     
     def hide_con(self):
         if self.con_hidden == False:
-            # self.hyper_area.hide()
-            self.spinboxes.hide()
-            self.start_extract_con.hide()
+            # self.hyperscroll.hide()
+            self.spinboxwidget.hide()
+            self.startextractcon.hide()
             self.con_hidden = True
-        self.errorLabel.hide()
+        self.errorlabel.hide()
 
 
     def open_file(self):
@@ -203,8 +181,8 @@ class VideoWindow(QMainWindow):
             self.inp_video.setText('Input video(s): {}'.format(','.join([pth.split('/')[-1] for pth in path[0]])))
             self.vidplayer.setMedia(QMediaContent(QtCore.QUrl.fromLocalFile(self.filenames[0])))
             # self.vidplayer.setVideoOutput(self.vidwidget)
-            self.playBtn.setEnabled(True)
-        self.errorLabel.hide()
+            self.play.setEnabled(True)
+        self.errorlabel.hide()
         i = 0
         for file in self.filenames:
             filename = file.split("/")[-1]
@@ -219,47 +197,51 @@ class VideoWindow(QMainWindow):
     def remove_file(self):
         self.filenames = []
         self.inp_video.setText('Input video(s): ')
-        self.errorLabel.hide()
+        self.errorlabel.hide()
 
-    def ind_analysis(self):
-        import FrequencyAnalysis as freqan
-        self.INDEPENDENT = 1
-        self.COMBINED = 0
-        i = 0
-        # self.progress.setText("Aggregating data...")
-        # for file in self.videos_wid.currentData(self.videos_wid):
-        #     freqan.FreqAnalysis(file, self.extractedpath[i], self.paper.currentText(), self.emotion.currentText())
-        #     i += 1
-        self.video_select.show()
+    def execute_ind_analysis(self):
         for i in range(self.videos_wid.model().rowCount()):
             if self.videos_wid.model().item(i).checkState() == Qt.Checked:
                 filename = self.videos_wid.model().item(i).data()
-                self.video_select.addItem(filename)
+                # self.video_select.addItem(filename)
                 freqan.FreqAnalysis(filename, "extracted/extracted_{}.csv".format(filename), self.paper.currentText(), self.emotion.currentText())
-        # for file in self.filenames:
-        #     filename = file.split("/")[-1]
-        #     filename = filename.partition(".")[0]
-        #     # att = getattr(self, "checkBox_{}".format(i+1))
-        #     # if att.isChecked():
-        #     #     self.video_select.addItem(filename)
-        #     if self.videos_wid.model().item(i).checkState() == Qt.Checked:
-        #         self.video_select.addItem(filename)
-        #         freqan.FreqAnalysis(filename, self.extractedpath[i], self.paper.currentText(), self.emotion.currentText())
-        #     i += 1
-        # self.progress.setText("")
-    def com_analysis(self):
-        import CombinedAnalysis as coman
-        self.INDEPENDENT = 0
-        self.COMBINED = 1
-        i = 0
-        # for i in range(self.videos_wid.model().rowCount()):
-        #     if self.videos_wid.model().item(i).checkState() == Qt.Checked:
-        #         filename = self.videos_wid.model().item(i).data()
-        #         self.video_select.addItem(filename)
+
+    def execute_com_analysis(self):
         filenames = self.videos_wid.currentData()
         # self.video_select.addItems(filenames)
-        self.video_select.clear()
         coman.CombFreqAnalysis(filenames, len(filenames))
+        return "Done"
+
+    def ind_analysis(self):
+        self.INDEPENDENT = 1
+        self.COMBINED = 0
+        filenames = self.videos_wid.currentData()
+        self.video_select.addItems(filenames)
+
+        worker = Worker(self.execute_ind_analysis) # Any other args, kwargs are passed to the run function
+        worker.signals.result.connect(self.print_output)
+        worker.signals.finished.connect(self.thread_complete)
+        worker.signals.progress.connect(self.progress_fn)
+
+        # Execute
+        self.threadpool.start(worker)  
+        return "Done"
+ 
+        # self.status.setText("")
+    def com_analysis(self):
+        self.INDEPENDENT = 0
+        self.COMBINED = 1
+        self.video_select.clear()
+
+        worker = Worker(lambda: self.execute_com_analysis) # Any other args, kwargs are passed to the run function
+        worker.signals.result.connect(self.print_output)
+        worker.signals.finished.connect(self.thread_complete)
+        worker.signals.progress.connect(self.progress_fn)
+
+        # Execute
+        self.threadpool.start(worker)
+        # i = 0
+
         
     def show_analysis_figures(self):
         if self.INDEPENDENT == 1:
@@ -270,48 +252,60 @@ class VideoWindow(QMainWindow):
             self.paperimg.setPixmap(QPixmap(f"images/{self.paper.currentText()}_{name}.png"))
             self.paperemo.setPixmap(QPixmap(f"images/{self.paper.currentText()}{self.emotion.currentText()}_{name}.png"))
 
+    def execute_AU_extract(self, AUint, poseRx, poseRz):
+        os.system(OpenFacePath + "/build/bin/FaceLandmarkVidMulti -pose -aus -vis-track -vis-aus -f \"{}\"".format('\" -f \"'.join(self.filenames)))
+        i = 0
+        for file in self.filenames:
+            filename = file.split("/")[-1]
+            filename = filename.partition(".")[0]
+            # print(filename)
+            arg = "processed/{}.csv".format(filename)
+            # print(au.ExtractEmotion(arg))
+            self.emos, self.extractedpath[i] = au.ExtractEmotion(arg, filename, AUint, poseRx, poseRz)
+            # freqan.FreqAnalysis(extractedpath)
+            i += 1
+        return "Done"
+
+    def progress_fn(self, n):
+        print("%d%% done" % n)
+
+    def print_output(self, s):
+        print(s)
+
+    def thread_complete(self):
+        print("THREAD COMPLETE!")
 
     def action_unit_bin(self):
         if self.filenames == []:
-            self.errorLabel.show()
-            self.errorLabel.setText("Error: Input video first")
+            self.errorlabel.show()
+            self.errorlabel.setText("Error: Input video first")
         else:
-            # self.progress.setText("Extracting Emotions...")
+            # self.status.setText("Extracting Emotions...")
             # -vis-track -vis-aus
-            subprocess.run(OpenFacePath + "/build/bin/FaceLandmarkVidMulti -pose -aus -vis-track -vis-aus -f \"{}\"".format('\" -f \"'.join(self.filenames)), shell = True)
-            import AUtoEmotion as au
-            i = 0
-            for file in self.filenames:
-                filename = file.split("/")[-1]
-                filename = filename.partition(".")[0]
-                # print(filename)
-                arg = "processed/{}.csv".format(filename)
-                # print(au.ExtractEmotion(arg))
-                self.emos, self.extractedpath[i] = au.ExtractEmotion(arg, filename, None, None, None)
-                # freqan.FreqAnalysis(extractedpath)
-                i += 1
-            # self.progress.setText("Extraction results saved...")
-            self.errorLabel.hide()
+            worker = Worker(lambda: self.execute_AU_extract(None,None,None)) # Any other args, kwargs are passed to the run function
+            worker.signals.result.connect(self.print_output)
+            worker.signals.finished.connect(self.thread_complete)
+            worker.signals.progress.connect(self.progress_fn)
+
+            # Execute
+            self.threadpool.start(worker)
+            # self.status.setText("Extraction results saved...")
+            self.errorlabel.hide()
 
     def action_unit_con(self):
         if self.filenames == []:
-            self.errorLabel.show()
-            self.errorLabel.setText("Error: Input video first")
+            self.errorlabel.show()
+            self.errorlabel.setText("Error: Input video first")
         else:
-            # self.progress.setText("Extracting Emotions...")
-            subprocess.run(OpenFacePath + "/build/bin/FaceLandmarkVidMulti -vis-track -vis-aus -pose -aus -f \"{}\"".format('\" -f \"'.join(self.filenames)), shell = True)
-            import AUtoEmotion as au
-            i = 0
-            for file in self.filenames:
-                filename = file.split("/")[-1]
-                filename = filename.partition(".")[0]
-                # print(filename)
-                arg = "processed/{}.csv".format(filename)
-                # print(au.ExtractEmotion(arg))
-                self.emos, self.extractedpath[i] = au.ExtractEmotion(arg, self.AUint.value(), self.poserx.value(), self.poserz.value())
-                i += 1
-            # self.progress.setText("Extraction results saved...")
-            self.errorLabel.hide()
+            worker = Worker(lambda: self.execute_AU_extract(self.AUint.value(), self.poseRx.value(), self.poseRz.value())) # Any other args, kwargs are passed to the run function
+            worker.signals.result.connect(self.print_output)
+            worker.signals.finished.connect(self.thread_complete)
+            worker.signals.progress.connect(self.progress_fn)
+
+            # Execute
+            self.threadpool.start(worker)
+            # self.status.setText("Extraction results saved...")
+            self.errorlabel.hide()
 
             
                 # return (res)
