@@ -57,3 +57,7 @@ Sinha, T. 2022. Enriching problem-solving followed by instruction with explanato
 **Dr. Tanmay Sinha**
 
 Email: tanmay.sinha@gess.ethz.ch
+
+**Sunidhi Dhandhania**
+
+Email: sunidhi@iitk.ac.in
