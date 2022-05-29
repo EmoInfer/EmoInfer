@@ -45,7 +45,7 @@ If you use _EmoInfer_ in your work and/or publications, we ask you to kindly cit
 
 **Overall system**
 
-Sinha, T., Dhandhania, S. 2022. Democratizing emotion research in learning sciences. _In Proceedings of Artificial Intelligence in Education_
+Sinha, T., & Dhandhania, S. 2022. Democratizing emotion research in learning sciences. _In Proceedings of Artificial Intelligence in Education_
 
 **Empirical evidence based on the _EmoInfer_ pipeline**
 
