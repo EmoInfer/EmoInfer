@@ -4,9 +4,9 @@
 
 ### ACADEMIC OR NON-PROFIT ORGANIZATION NONCOMMERCIAL RESEARCH USE ONLY
 
-## BY USING OR DOWNLOADING THE SOFTWARE, YOU ARE AGREEING TO THE TERMS OF THIS LICENSE AGREEMENT. IF YOU DO NOT AGREE WITH THESE TERMS, YOU MAY NOT USE OR DOWNLOAD THE SOFTWARE.
+### BY USING OR DOWNLOADING THE SOFTWARE, YOU ARE AGREEING TO THE TERMS OF THIS LICENSE AGREEMENT. IF YOU DO NOT AGREE WITH THESE TERMS, YOU MAY NOT USE OR DOWNLOAD THE SOFTWARE.
 
-**This is a license agreement ("Agreement") between your academic institution or non-profit organization or self (called "Licensee" or "You" in this Agreement) and ETH Zürich (called "Licensor" in this Agreement). All rights not specifically granted to you in this Agreement are reserved for Licensor.** 
+This is a license agreement ("Agreement") between your academic institution or non-profit organization or self (called "Licensee" or "You" in this Agreement) and ETH Zürich (called "Licensor" in this Agreement). All rights not specifically granted to you in this Agreement are reserved for Licensor. 
 
 ### RESERVATION OF OWNERSHIP AND GRANT OF LICENSE: 
 
