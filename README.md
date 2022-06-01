@@ -8,7 +8,7 @@ We offer _EmoInfer_ as a tool to accelerate process-based research on emotions i
 * OpenFace (installation instructions [here](https://github.com/TadasBaltrusaitis/OpenFace/wiki#installation))
 * PyQt5 (installation instructions [here](https://pypi.org/project/PyQt5/))
 * QtMultimedia (installation instructions [here](https://ports.macports.org/port/qt5-qtmultimedia/))
-
+* Typing-Extensions (installation instructions [here](https://pypi.org/project/typing-extensions/), in some cases an additional ```--upgrade``` may be needed)
 
 To run _EmoInfer_,
 
@@ -27,7 +27,7 @@ To run _EmoInfer_,
 
 
 **Emotion Inference:** _EmoInfer_ infers emotions from the extracted facial action units, drawing on three culturally-generalizable coding schemes outlined in [Sinha et al., JLS, 2022](https://www.tandfonline.com/doi/full/10.1080/10508406.2021.1964506).
-* After emotion extraction, a file named _'extracted/extracted.csv'_ is saved in the same directory, which has the details of the emotions inferred in each frame.
+* After emotion extraction, a file called _'extracted.csv'_ is saved in the _'{HEAD}/extracted'_ folder., with the details of emotions inferred in each frame.
 
 
 **Analysis:** _EmoInfer_ enables statistical analyses and visualizations of the emotions extracted in the video(s). More details on the analyses possible are outlined in the citation below.
