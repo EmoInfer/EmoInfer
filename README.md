@@ -27,13 +27,13 @@ To run _EmoInfer_,
 
 
 **Emotion Inference:** _EmoInfer_ infers emotions from the extracted facial action units, drawing on three culturally-generalizable coding schemes outlined in [Sinha et al., JLS, 2022](https://www.tandfonline.com/doi/full/10.1080/10508406.2021.1964506).
-* After emotion extraction, a file called _'extracted.csv'_ is saved in the _'{HEAD}/extracted'_ folder., with the details of emotions inferred in each frame.
+* After emotion extraction, a file called _'extracted.csv'_ is saved in the _'{HEAD}/extracted'_ folder, with the details of emotions inferred in each frame.
 
 
 **Analysis:** _EmoInfer_ enables statistical analyses and visualizations of the emotions extracted in the video(s). More details on the analyses possible are outlined in the citation below.
-* Images showing resultant graphs are saved in the head directory. 
-* Overall statistics of the video(s) relevant to a particular coding scheme are saved in _'{coding scheme}.png'_.
-* Emotion-specific results are saved in _'{coding scheme}{emotion}.png'_. 
+* Images showing resultant graphs are saved in the _'{HEAD}/images'_ folder.
+* Overall statistics of the video(s) relevant to a particular coding scheme are saved in _'{HEAD}/images/{coding scheme}/{video id}'_.
+* Emotion-specific results are saved in _'{HEAD}/images/{coding scheme}/{video id}/{emotion}.png'_. 
 
 **Sequencing:** _EmoInfer_ also supports the extraction of important sequences from the inferred emotions in the video. 
 * Suggested methodological choices and the underlying rationale can be found [here](https://tinyurl.com/EmoInferSeq).
