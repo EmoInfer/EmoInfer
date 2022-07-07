@@ -20,6 +20,7 @@ from WorkerThread import WorkerSignals, Worker
 import AUtoEmotion as au
 import FrequencyAnalysis as freqan
 import CombinedAnalysis as coman
+import SequenceAnalysis as seqan
 
 OpenFacePath = "/home/sunidhi/Desktop/zurichproj/OpenFace"
 
@@ -279,7 +280,7 @@ class VideoWindow(QMainWindow):
             self.paperemo.setPixmap(QPixmap(f"images/{self.paper.currentText()}{self.emotion.currentText()}_{name}.png"))
 
     def execute_AU_extract(self, AUint, poseRx, poseRz):
-        subprocess.run(OpenFacePath + "/build/bin/FaceLandmarkVidMulti -pose -aus -vis-track -vis-aus -f \"{}\"".format('\" -f \"'.join(self.filenames)), shell=True)
+        os.system(OpenFacePath + "/build/bin/FaceLandmarkVidMulti -pose -aus -vis-track -vis-aus -f \"{}\"".format('\" -f \"'.join(self.filenames)))
         i = 0
         for file in self.filenames:
             filename = file.split("/")[-1]
@@ -337,8 +338,16 @@ class VideoWindow(QMainWindow):
                 # return (res)
 # -pose -gaze -verbose
 
+    def execute_seq_analysis(self, filename, path, paper, hyp):
+        strs = seqan.seq_analysis(filename, path, paper, hyp)
+        return strs
+
+    def output_seq(self, strs):
+        self.uniqemo.setText(strs[0])
+        self.mullen.setText(strs[1])
+        self.mulemo.setText(strs[2])
+
     def sequencing_func(self):
-        import SequenceAnalysis as seqan
         filenames = self.videos_wid2.currentData()
         filename = filenames[0]
         path = "extracted/extracted_{}.csv".format(filename)
@@ -353,15 +362,21 @@ class VideoWindow(QMainWindow):
         hyp.append(self.minfl.value())
         hyp.append(self.maxfl.value())
 
+        if filenames == []:
+            self.errorlabel.show()
+            self.errorlabel.setText("Error: Select video first")
+        else:
+            worker = Worker(lambda: self.execute_seq_analysis(filename, path, paper, hyp)) # Any other args, kwargs are passed to the run function
+            worker.signals.result.connect(self.output_seq)
+            worker.signals.finished.connect(self.thread_complete)
+            worker.signals.progress.connect(self.progress_fn)
 
-        seqan.seq_analysis(filename, path, paper, hyp)
-        new_file = open("sequencing/final_sequences_{paper}_{filename}.txt").read()
-        new_mult_emos = open("sequencing/final_mult_sequences_{paper}_{filename}.txt").read()
-        new_uniq_emos = open("sequencing/final_uniq_sequences_{paper}_{filename}.txt").read()
+            # Execute
+            self.threadpool.start(worker)
+            self.errorlabel.hide()
         
-        self.uniqemo.setText(new_uniq_emos)
-        self.mullen.setText(new_file)
-        self.mulemo.setText(new_mult_emos)
+
+
 
 if __name__ == '__main__':
     app = QApplication([])

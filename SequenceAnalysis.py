@@ -8,7 +8,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import math
-import sys
+import sys, os
 import subprocess
 
 
@@ -59,7 +59,7 @@ def seq_analysis(filename, path, paper, hyp):
             
     f_1.close()
 
-    subprocess.run(f"java -jar spmf.jar run Fournier08-Closed+time sequencing/{paper}_{filename}_raw_sequences.txt sequencing/output_{paper}_{filename}_sequences.txt {hyp[0]}% {hyp[1]} {hyp[2]} {hyp[3]} {hyp[4]}", shell = True)
+    os.system(f"java -jar spmf.jar run Fournier08-Closed+time sequencing/{paper}_{filename}_raw_sequences.txt sequencing/output_{paper}_{filename}_sequences.txt {hyp[0]}% {hyp[1]} {hyp[2]} {hyp[3]} {hyp[4]}")
 
     # subprocess.run("java -jar ../spmf.jar run Fournier08-Closed+time sequencing/Cordaro_raw_sequences.txt sequencing/output_Cordaro_sequences.txt 75% 15 45 15 45", shell = True)
     # subprocess.run("java -jar ../spmf.jar run Fournier08-Closed+time sequencing/Keltner_raw_sequences.txt sequencing/output_Keltner_sequences.txt 75% 15 45 15 45", shell = True)
@@ -124,9 +124,9 @@ def seq_analysis(filename, path, paper, hyp):
 
     l = list(set_of_seq)
 
-    new_file = open("sequencing/final_sequences_{paper}_{filename}.txt", 'w+')
-    new_mult_emos = open("sequencing/final_mult_sequences_{paper}_{filename}.txt", 'w+')
-    new_uniq_emos = open("sequencing/final_uniq_sequences_{paper}_{filename}.txt", 'w+')
+    new_file = open(f"sequencing/final_sequences_{paper}_{filename}.txt", 'w+')
+    new_mult_emos = open(f"sequencing/final_mult_sequences_{paper}_{filename}.txt", 'w+')
+    new_uniq_emos = open(f"sequencing/final_uniq_sequences_{paper}_{filename}.txt", 'w+')
 
 
     fin = []
@@ -171,3 +171,7 @@ def seq_analysis(filename, path, paper, hyp):
 
     new_uniq_emos.close()
 
+    uniq_str = '\n'.join(new_uniq_emos_l)
+    mullen_str = '\n'.join(fin)
+    mulemo_str = '\n'.join(mult_emo_l)
+    return uniq_str, mullen_str, mulemo_str
