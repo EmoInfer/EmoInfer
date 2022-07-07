@@ -36,6 +36,7 @@ To run _EmoInfer_,
 * Emotion-specific results are saved in _'{coding scheme}{emotion}.png'_. 
 
 **Sequencing:** _EmoInfer_ also supports the extraction of important sequences from the inferred emotions in the video. 
+* Suggested methodological choices and the underlying rationale can be found [here](https://tinyurl.com/EmoInferSeq).
 
 
 ## Citation
