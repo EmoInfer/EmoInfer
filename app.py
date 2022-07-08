@@ -1,6 +1,7 @@
 #app exec file
 
 # from asyncio.windows_events import None
+from multiprocessing import Process
 from typing_extensions import Self
 from PyQt5.QtWidgets import *
 # from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QGridLayout, QStyle, \
@@ -19,6 +20,7 @@ from WorkerThread import WorkerSignals, Worker
 import AUtoEmotion as au
 import FrequencyAnalysis as freqan
 import CombinedAnalysis as coman
+import SequenceAnalysis as seqan
 
 OpenFacePath = "/home/sunidhi/Desktop/zurichproj/OpenFace"
 
@@ -42,11 +44,18 @@ class VideoWindow(QMainWindow):
         self.vidplayer.setVideoOutput(self.vidwidget)
 
         self.videos_wid = CheckableComboBox()
+        self.videos_wid2 = CheckableComboBox()
         self.lay_vid.addWidget(self.videos_wid)
+        self.lay_vid_3.addWidget(self.videos_wid2)
+
 
         self.paper.addItem("Cordaro et al., 2018")
         self.paper.addItem("Keltner et al., 2019")
         self.paper.addItem("Du et al., 2014")
+
+        self.paper_seq.addItem("Cordaro et al., 2018")
+        self.paper_seq.addItem("Keltner et al., 2019")
+        self.paper_seq.addItem("Du et al., 2014")
 
         self.emo_list =  [            'Amusement',             'Happiness',                   'Awe',
                                 'Pride',              'Surprise',                 'Anger',
@@ -76,6 +85,7 @@ class VideoWindow(QMainWindow):
         self.indanalysis.clicked.connect(self.ind_analysis)
         self.comanalysis.clicked.connect(self.com_analysis)
         self.show_analysis_fig.clicked.connect(self.show_analysis_figures)
+        self.extractseq.clicked.connect(self.sequencing_func)
 
         self.INDEPENDENT = 1
         self.COMBINED = 0
@@ -193,6 +203,7 @@ class VideoWindow(QMainWindow):
             # att.setText(filename)
             i += 1
             self.videos_wid.addItem(filename)
+            self.videos_wid2.addItem(filename)
         
     def remove_file(self):
         self.filenames = []
@@ -205,6 +216,7 @@ class VideoWindow(QMainWindow):
                 filename = self.videos_wid.model().item(i).data()
                 # self.video_select.addItem(filename)
                 freqan.FreqAnalysis(filename, "extracted/extracted_{}.csv".format(filename), self.paper.currentText(), self.emotion.currentText())
+                
 
     def execute_com_analysis(self):
         filenames = self.videos_wid.currentData()
@@ -217,14 +229,29 @@ class VideoWindow(QMainWindow):
         self.COMBINED = 0
         filenames = self.videos_wid.currentData()
         self.video_select.addItems(filenames)
+        # for i in range(self.videos_wid.model().rowCount()):
+        #     if self.videos_wid.model().item(i).checkState() == Qt.Checked:
+        #         filename = self.videos_wid.model().item(i).data()
+        #         # self.video_select.addItem(filename)
+        #         freqan.FreqAnalysis(filename, "extracted/extracted_{}.csv".format(filename), self.paper.currentText(), self.emotion.currentText())
 
-        worker = Worker(self.execute_ind_analysis) # Any other args, kwargs are passed to the run function
-        worker.signals.result.connect(self.print_output)
-        worker.signals.finished.connect(self.thread_complete)
-        worker.signals.progress.connect(self.progress_fn)
+## following code is for multiprocessing 
+        # p_i = Process(target=self.execute_ind_analysis, args=())
+        # p_i.start()
+        # # input("Type any key to quit.")
+        # print("Waiting for graph window process to join...")
+        # p_i.join()
+        # print("Process joined successfully. C YA !")
 
-        # Execute
-        self.threadpool.start(worker)  
+
+        self.execute_ind_analysis()
+        # worker = Worker(self.execute_ind_analysis) # Any other args, kwargs are passed to the run function
+        # worker.signals.result.connect(self.print_output)
+        # worker.signals.finished.connect(self.thread_complete)
+        # worker.signals.progress.connect(self.progress_fn)
+
+        # # Execute
+        # self.threadpool.start(worker)  
         return "Done"
  
         # self.status.setText("")
@@ -232,14 +259,14 @@ class VideoWindow(QMainWindow):
         self.INDEPENDENT = 0
         self.COMBINED = 1
         self.video_select.clear()
+        self.execute_com_analysis()
+        # worker = Worker(lambda: self.execute_com_analysis) # Any other args, kwargs are passed to the run function
+        # worker.signals.result.connect(self.print_output)
+        # worker.signals.finished.connect(self.thread_complete)
+        # worker.signals.progress.connect(self.progress_fn)
 
-        worker = Worker(lambda: self.execute_com_analysis) # Any other args, kwargs are passed to the run function
-        worker.signals.result.connect(self.print_output)
-        worker.signals.finished.connect(self.thread_complete)
-        worker.signals.progress.connect(self.progress_fn)
-
-        # Execute
-        self.threadpool.start(worker)
+        # # Execute
+        # self.threadpool.start(worker)
         # i = 0
 
         
@@ -307,9 +334,48 @@ class VideoWindow(QMainWindow):
             # self.status.setText("Extraction results saved...")
             self.errorlabel.hide()
 
-            
+    
                 # return (res)
 # -pose -gaze -verbose
+
+    def execute_seq_analysis(self, filename, path, paper, hyp):
+        strs = seqan.seq_analysis(filename, path, paper, hyp)
+        return strs
+
+    def output_seq(self, strs):
+        self.uniqemo.setText(strs[0])
+        self.mullen.setText(strs[1])
+        self.mulemo.setText(strs[2])
+
+    def sequencing_func(self):
+        filenames = self.videos_wid2.currentData()
+        filename = filenames[0]
+        path = "extracted/extracted_{}.csv".format(filename)
+        paper = self.paper_seq.currentText()
+        paper = paper.split(' ')[0]
+
+        #hyperparameters
+        hyp = []
+        hyp.append(self.minsup.value())
+        hyp.append(self.minsucc.value())
+        hyp.append(self.maxsucc.value())
+        hyp.append(self.minfl.value())
+        hyp.append(self.maxfl.value())
+
+        if filenames == []:
+            self.errorlabel.show()
+            self.errorlabel.setText("Error: Select video first")
+        else:
+            worker = Worker(lambda: self.execute_seq_analysis(filename, path, paper, hyp)) # Any other args, kwargs are passed to the run function
+            worker.signals.result.connect(self.output_seq)
+            worker.signals.finished.connect(self.thread_complete)
+            worker.signals.progress.connect(self.progress_fn)
+
+            # Execute
+            self.threadpool.start(worker)
+            self.errorlabel.hide()
+        
+
 
 
 if __name__ == '__main__':

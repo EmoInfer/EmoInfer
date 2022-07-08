@@ -4,6 +4,7 @@
 # In[163]:
 
 
+import statistics as stats
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -101,11 +102,11 @@ def FreqAnalysis(filename, path, paper, emotion):
     plt.ylabel('# of frames x # of faces')
     plt.xlabel('Emotion')
 
-    plt.title("Cordaro et al.")
+    plt.title(label="Cordaro et al.")
 
     # plt.show()
     # if paper == pap:
-    plt.savefig(f"images/{pap}_{filename}.png", bbox_inches='tight')
+    plt.savefig(f"images/{pap}_{filename}.png")
     plt.close()
 
     plt.figure()
@@ -127,7 +128,7 @@ def FreqAnalysis(filename, path, paper, emotion):
 
     # plt.show()
     # if paper == pap:
-    plt.savefig(f"images/{pap}_{filename}.png", bbox_inches='tight')
+    plt.savefig(f"images/{pap}_{filename}.png")
     plt.close()
 
     plt.figure()
@@ -147,7 +148,7 @@ def FreqAnalysis(filename, path, paper, emotion):
 
     # plt.show()
     # if paper == pap:
-    plt.savefig(f"images/{pap}_{filename}.png", bbox_inches='tight')
+    plt.savefig(f"images/{pap}_{filename}.png")
     plt.close()
 
     # i = 0
@@ -221,7 +222,7 @@ def FreqAnalysis(filename, path, paper, emotion):
         ax = fig.add_axes([0,0,1,1])
 
         # Create the boxplot
-        parts = ax.violinplot(data_to_plot1, showmeans=False, showmedians=False, showextrema=True)
+        parts = ax.violinplot(data_to_plot1, showmeans=True, showmedians=True, showextrema=True)
     #     ax2.set_title("Customized violin plot')
     #     parts = ax2.violinplot(
     #             data, showmeans=False, showmedians=False,
@@ -277,6 +278,14 @@ def FreqAnalysis(filename, path, paper, emotion):
             c2 = [0 if math.isnan(n) else (n*100)/n_frames for n in per[i]["Keltner_"]]
             c3 = [0 if math.isnan(n) else (n*100)/n_frames for n in per[i]["Du_"]]
     ## combine these different collections into a list
+        # if emo == "Embarrassment":
+        #     std2 = stats.stdev(c2)
+        #     mn2 = stats.mean(c2)
+        #     intrng2_first, intrng2_second = np.percentile(c2, [75,25])
+        #     intrng2 = intrng2_second - intrng2_first
+        #     print(std2)
+        #     print(mn2)
+        #     print(intrng2)
         data_to_plot1 = [c2]
         pap = "Keltner et al., 2019"
     #     data_to_plot2 = [c2]
@@ -289,7 +298,7 @@ def FreqAnalysis(filename, path, paper, emotion):
         ax = fig.add_axes([0,0,1,1])
 
         # Create the boxplot
-        parts = ax.violinplot(data_to_plot1, showmeans=False, showmedians=False, showextrema=True)
+        parts = ax.violinplot(data_to_plot1, showmeans=True, showmedians=True, showextrema=True)
     #     ax2.set_title("Customized violin plot')
     #     parts = ax2.violinplot(
     #             data, showmeans=False, showmedians=False,
@@ -341,6 +350,8 @@ def FreqAnalysis(filename, path, paper, emotion):
             c2 = [0 if math.isnan(n) else (n*100)/n_frames for n in per[i]["Keltner_"]]
             c3 = [0 if math.isnan(n) else (n*100)/n_frames for n in per[i]["Du_"]]
         ## combine these different collections into a list
+        # std = stdev(c3)
+        
         data_to_plot1 = [c3]
         pap = "Du et al., 2014"
     #     data_to_plot2 = [c2]
@@ -353,7 +364,7 @@ def FreqAnalysis(filename, path, paper, emotion):
         ax = fig.add_axes([0,0,1,1])
 
         # Create the boxplot
-        parts = ax.violinplot(data_to_plot1, showmeans=False, showmedians=False, showextrema=True)
+        parts = ax.violinplot(data_to_plot1, showmeans=True, showmedians=True, showextrema=True)
     #     ax2.set_title("Customized violin plot')
     #     parts = ax2.violinplot(
     #             data, showmeans=False, showmedians=False,
