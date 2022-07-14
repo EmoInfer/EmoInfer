@@ -834,8 +834,8 @@ p, li { white-space: pre-wrap; }
      <widget class="QComboBox" name="paper">
       <property name="geometry">
        <rect>
-        <x>160</x>
-        <y>260</y>
+        <x>390</x>
+        <y>50</y>
         <width>261</width>
         <height>31</height>
        </rect>
@@ -847,11 +847,18 @@ p, li { white-space: pre-wrap; }
      <widget class="QLabel" name="label_7">
       <property name="geometry">
        <rect>
-        <x>30</x>
-        <y>260</y>
-        <width>121</width>
+        <x>390</x>
+        <y>10</y>
+        <width>161</width>
         <height>31</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>13</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
       </property>
       <property name="text">
        <string>Coding Scheme: </string>
@@ -860,11 +867,18 @@ p, li { white-space: pre-wrap; }
      <widget class="QLabel" name="label_10">
       <property name="geometry">
        <rect>
-        <x>450</x>
-        <y>260</y>
-        <width>71</width>
+        <x>740</x>
+        <y>10</y>
+        <width>91</width>
         <height>31</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>13</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
       </property>
       <property name="text">
        <string>Emotion:</string>
@@ -873,8 +887,8 @@ p, li { white-space: pre-wrap; }
      <widget class="QComboBox" name="emotion">
       <property name="geometry">
        <rect>
-        <x>520</x>
-        <y>260</y>
+        <x>740</x>
+        <y>50</y>
         <width>251</width>
         <height>31</height>
        </rect>
@@ -893,7 +907,7 @@ p, li { white-space: pre-wrap; }
        </rect>
       </property>
       <property name="text">
-       <string>Average % emotion incidence = 25.0</string>
+       <string/>
       </property>
      </widget>
      <widget class="QLabel" name="std_dev">
@@ -901,12 +915,12 @@ p, li { white-space: pre-wrap; }
        <rect>
         <x>850</x>
         <y>390</y>
-        <width>301</width>
+        <width>431</width>
         <height>31</height>
        </rect>
       </property>
       <property name="text">
-       <string>Std. deviation (%  emotion incidence) = 12.3</string>
+       <string/>
       </property>
      </widget>
      <widget class="QLabel" name="int_rng">
@@ -919,20 +933,20 @@ p, li { white-space: pre-wrap; }
        </rect>
       </property>
       <property name="text">
-       <string>Interquartile range (%  emotion incidence) = 8.63</string>
+       <string/>
       </property>
      </widget>
      <widget class="QLabel" name="high_inc">
       <property name="geometry">
        <rect>
         <x>850</x>
-        <y>320</y>
-        <width>341</width>
-        <height>41</height>
+        <y>330</y>
+        <width>471</width>
+        <height>31</height>
        </rect>
       </property>
       <property name="text">
-       <string>Emotion with highest incidence :  Embarrassment</string>
+       <string/>
       </property>
      </widget>
      <widget class="QLabel" name="paperimg">
@@ -973,57 +987,12 @@ p, li { white-space: pre-wrap; }
        <bool>true</bool>
       </property>
      </widget>
-     <widget class="QComboBox" name="video_select">
-      <property name="geometry">
-       <rect>
-        <x>860</x>
-        <y>260</y>
-        <width>291</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <property name="cursor">
-       <cursorShape>PointingHandCursor</cursorShape>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_11">
-      <property name="geometry">
-       <rect>
-        <x>800</x>
-        <y>260</y>
-        <width>51</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Video:</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="show_analysis_fig">
-      <property name="geometry">
-       <rect>
-        <x>1170</x>
-        <y>250</y>
-        <width>111</width>
-        <height>41</height>
-       </rect>
-      </property>
-      <property name="cursor">
-       <cursorShape>OpenHandCursor</cursorShape>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">background-color: rgb(115, 210, 22);</string>
-      </property>
-      <property name="text">
-       <string>ENTER</string>
-      </property>
-     </widget>
      <widget class="QLabel" name="label_16">
       <property name="geometry">
        <rect>
         <x>20</x>
         <y>220</y>
-        <width>171</width>
+        <width>221</width>
         <height>31</height>
        </rect>
       </property>
@@ -1035,7 +1004,7 @@ p, li { white-space: pre-wrap; }
        </font>
       </property>
       <property name="text">
-       <string>Display results for:</string>
+       <string>Display results for video(s):</string>
       </property>
      </widget>
      <widget class="QLabel" name="label_17">
@@ -1081,6 +1050,69 @@ p, li { white-space: pre-wrap; }
       <property name="text">
        <string> (e.g. - 1 frame = 1/30th s in a 30 fps video)</string>
       </property>
+     </widget>
+     <widget class="QWidget" name="horizontalLayoutWidget_5">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>250</y>
+        <width>401</width>
+        <height>61</height>
+       </rect>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_4">
+       <item>
+        <widget class="QComboBox" name="video_select">
+         <property name="minimumSize">
+          <size>
+           <width>300</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QPushButton" name="show_analysis_fig">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>40</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>100</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="cursor">
+          <cursorShape>OpenHandCursor</cursorShape>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(115, 210, 22);</string>
+         </property>
+         <property name="text">
+          <string>ENTER</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </widget>
     </widget>
     <widget class="QWidget" name="sequencing">
