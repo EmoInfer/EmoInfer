@@ -52,7 +52,7 @@ def seq_analysis(filename, path, paper, hyp):
         for ind, row in df1.iterrows():
     #         #print(row['Cordaro'])
             if row[paper] is not "":
-                f_1.write('<' + str(row['frame']) + '> ' + ' '.join(row['Cordaro'].split(", ")) + ' -1 ')
+                f_1.write('<' + str(row['frame']) + '> ' + ' '.join(row[paper].split(", ")) + ' -1 ')
                 flag_a = 1
         if flag_a:
             f_1.write('-2\n')
@@ -170,6 +170,10 @@ def seq_analysis(filename, path, paper, hyp):
     #print(new_uniq_emos_l)
 
     new_uniq_emos.close()
+
+    new_uniq_emos_l = sorted(new_uniq_emos_l, key=len)
+    fin = sorted(fin, key=len)
+    mult_emo_l = sorted(mult_emo_l, key=len)
 
     uniq_str = '\n'.join(new_uniq_emos_l)
     mullen_str = '\n'.join(fin)

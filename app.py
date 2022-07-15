@@ -32,19 +32,26 @@ class VideoWindow(QMainWindow):
         super(VideoWindow, self).__init__(parent)
         uic.loadUi("app.ui", self)
 
-        self.inp_video = self.findChild(QLabel, "inpvideo")
         self.filenames = []
 
-        self.play.setEnabled(False)
-        self.play.setIcon(self.style().standardIcon(QStyle.SP_MediaPlay))
-        self.play.clicked.connect(self.play_video)
+### VIDEO PLAYER
+        self.playbutton.setEnabled(False)
+        self.playbutton.setIcon(self.style().standardIcon(QStyle.SP_MediaPlay))
+        # self.play.clicked.connect(self.play_video)
+        self.playbutton.clicked.connect(self.play_video)
         self.slider.setRange(0,0)
         self.slider.sliderMoved.connect(self.set_position)
 
-
-        self.vidwidget = self.findChild(QVideoWidget,"vidplayer" )
+        self.vidwidget = QVideoWidget()
+        self.verticalLayout_vid.addWidget(self.vidwidget)
+        # self.vidwidget = self.findChild(QVideoWidget,"vidwidget" )
         self.vidplayer = QMediaPlayer(None, QMediaPlayer.VideoSurface)
         self.vidplayer.setVideoOutput(self.vidwidget)
+
+        self.vidplayer.stateChanged.connect(self.mediastate_changed)
+        self.vidplayer.positionChanged.connect(self.position_changed)
+        self.vidplayer.durationChanged.connect(self.duration_changed)
+### VIDEO PLAYER
 
         self.videos_wid = CheckableComboBox()
         self.videos_wid2 = CheckableComboBox()
@@ -93,11 +100,6 @@ class VideoWindow(QMainWindow):
         self.INDEPENDENT = 1
         self.COMBINED = 0
 
-        self.vidplayer.stateChanged.connect(self.mediastate_changed)
-        self.vidplayer.positionChanged.connect(self.position_changed)
-        self.vidplayer.durationChanged.connect(self.duration_changed)
-
-
         self.bin_hidden = True
         self.con_hidden = True
         self.extractedpath = [""]*1000
@@ -115,18 +117,20 @@ class VideoWindow(QMainWindow):
             self.vidplayer.pause()
  
         else:
+            # self.vidplayer.setVideoOutput(self.vidwidget)
             self.vidplayer.play()
+
  
  
     def mediastate_changed(self, state):
         if self.vidplayer.state() == QMediaPlayer.PlayingState:
-            self.play.setIcon(
+            self.playbutton.setIcon(
                 self.style().standardIcon(QStyle.SP_MediaPause)
  
             )
  
         else:
-            self.play.setIcon(
+            self.playbutton.setIcon(
                 self.style().standardIcon(QStyle.SP_MediaPlay)
  
             )
@@ -194,7 +198,8 @@ class VideoWindow(QMainWindow):
             self.inp_video.setText('Input video(s): {}'.format(','.join([pth.split('/')[-1] for pth in path[0]])))
             self.vidplayer.setMedia(QMediaContent(QtCore.QUrl.fromLocalFile(self.filenames[0])))
             # self.vidplayer.setVideoOutput(self.vidwidget)
-            self.play.setEnabled(True)
+            self.playbutton.setEnabled(True)
+            self.vidplayer.play()
         self.errorlabel.hide()
         i = 0
         for file in self.filenames:
