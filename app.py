@@ -349,7 +349,10 @@ class VideoWindow(QMainWindow):
             plt.savefig(f"images/{paper}{emotion}_{filename}.png", bbox_inches='tight')
             plt.close(fig)
             
-            std2 = stats.stdev(data_to_plot1[0])
+            try:
+                std2 = stats.stdev(data_to_plot1[0])
+            except:
+                std2 = -1
             mn2 = stats.mean(data_to_plot1[0])
             intrng2_first, intrng2_second = np.percentile(data_to_plot1[0], [75,25])
             intrng2 = intrng2_first - intrng2_second
