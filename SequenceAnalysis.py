@@ -12,11 +12,27 @@ import sys, os
 import subprocess
 
 
-def seq_analysis(filename, path, paper, hyp):
+def seq_analysis(filenames, n_videos, paper, hyp):
+    filename = "".join(filenames)
+    dfs = []
+    for i in range(n_videos):
+        df = pd.read_table('extracted/extracted_{}.csv'.format(filenames[i]), delimiter=',')
+        df.fillna('', inplace=True)
+        # print(df)
+        dfs.append(df)
 
-    df = pd.read_table(path, delimiter=',')
-    df.fillna('', inplace=True)
-    #print(df)
+    combined_df = pd.DataFrame()
+    fac = 0
+    for i in range(n_videos):
+        fcs = dfs[i]['face_id'].max() + 1
+        dfs[i]['face_id'] = dfs[i]['face_id'] + fac
+        fac = fac + fcs
+        # print(dfs[i])
+        combined_df = combined_df.append(dfs[i])
+        
+    # print(combined_df)
+
+    df = combined_df
 
     emos = [            'Amusement',             'Happiness',                   'Awe',
                     'Pride',              'Surprise',                 'Anger',
