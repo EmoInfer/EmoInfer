@@ -308,6 +308,9 @@ class VideoWindow(QMainWindow):
         whiskers_min = self.vid_res[filename]['whiskers_min']
         whiskers_max = self.vid_res[filename]['whiskers_max']
 
+        if not os.path.exists(f"images/{paper}/{filename}/"):
+            os.makedirs(f"images/{paper}/{filename}/")
+            
         plt.figure()
         i = 0
         if paper == "Cordaro":
@@ -329,7 +332,7 @@ class VideoWindow(QMainWindow):
         plt.ylabel('# of frames x # of faces')
         plt.xlabel('Emotion')
         plt.title(label=paper+" et al.")
-        plt.savefig(f"images/{paper}_{filename}.png")
+        plt.savefig(f"images/{paper}/{filename}/FreqBarGraph.png")
         plt.close()
 
         ## start with emotion specific
@@ -355,7 +358,7 @@ class VideoWindow(QMainWindow):
         plt.title(emotion)
         plt.xlabel(paper+" et al.")
         plt.ylabel("percentage")
-        plt.savefig(f"images/{paper}{emotion}_{filename}.png", bbox_inches='tight')
+        plt.savefig(f"images/{paper}/{filename}/{emotion}.png", bbox_inches='tight')
         plt.close(fig)
         
         try:
@@ -370,8 +373,8 @@ class VideoWindow(QMainWindow):
         self.avg_inc.setText("Average % emotion incidence = " + str("%.2f" % mn2))
         self.std_dev.setText("Std. deviation (%  emotion incidence) = " + str("%.2f" % std2))
         self.int_rng.setText("Interquartile range (%  emotion incidence) = " + str("%.2f" % intrng2))
-        self.paperimg.setPixmap(QPixmap(f"images/{paper}_{filename}.png"))
-        self.paperemo.setPixmap(QPixmap(f"images/{paper}{emotion}_{filename}.png"))
+        self.paperimg.setPixmap(QPixmap(f"images/{paper}/{filename}/FreqBarGraph.png"))
+        self.paperemo.setPixmap(QPixmap(f"images/{paper}/{filename}/{emotion}.png"))
 
     def execute_AU_extract(self, AUint, poseRx, poseRz):
         os.system(OpenFacePath + "/build/bin/FaceLandmarkVidMulti -pose -aus -vis-track -vis-aus -f \"{}\"".format('\" -f \"'.join(self.filenames)))
