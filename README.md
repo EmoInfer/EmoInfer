@@ -14,29 +14,42 @@ To run _EmoInfer_,
 
 1. Go to the _'app.py'_ file and modify the variable _'OpenFacePath'_ to be the path of OpenFace in your local machine.
 
-2. Run the following command ```python3 app.py``` in the head directory 
+2. Run the following command ```python3 app.py``` in the head directory.
+
+3. Upload one or multiple videos for which to extract emotion incidence and dynamics.
 
 
 ## Functionality and Use
 
-**Facial Action Unit Extraction:** _EmoInfer_ provides options of using binary or continuous facial action unit extraction.
+**1. Facial Action Unit Extraction:** _EmoInfer_ provides options of using binary or continuous facial action unit extraction.
 * To incorporate action units 53 (head up) and 54 (head down), the head pose threshold for pitch can be set (i.e., the rotation in radians around the X axis; 1 radian = 57.3 deg). 
 * To incorporate action units 55 (head tilt left) and 56 (head tilt right), the head pose threshold for roll can be set (i.e., the rotation in radians around the Z axis; 1 radian = 57.3 deg).
 * For continuous facial action units, a cutoff intensity above which a facial action unit is considered active needs to be specified (on a scale of 1 to 5). 
 * Facial action units detected in the uploaded video(s) are saved per frame in a file called _'{filename}.csv'_ in the _'{HEAD}/processed'_ folder.
 
 
-**Emotion Inference:** _EmoInfer_ infers emotions from the extracted facial action units, drawing on three culturally-generalizable coding schemes outlined in [Sinha et al., JLS, 2022](https://www.tandfonline.com/doi/full/10.1080/10508406.2021.1964506).
+**2. Emotion Inference:** _EmoInfer_ infers emotions from the extracted facial action units, drawing on three culturally-generalizable coding schemes outlined in [Sinha et al., JLS, 2022](https://www.tandfonline.com/doi/full/10.1080/10508406.2021.1964506).
 * After emotion extraction, a file called _'extracted.csv'_ is saved in the _'{HEAD}/extracted'_ folder, with the details of emotions inferred in each frame.
 
 
-**Analysis:** _EmoInfer_ enables statistical analyses and visualizations of the emotions extracted in the video(s). More details on the analyses possible are outlined in the citation below.
+**3. Analysis:** _EmoInfer_ enables statistical analyses and visualizations of the emotions extracted in the video(s). More details on the analyses possible are outlined in the citation below.
 * Images showing resultant graphs are saved in the _'{HEAD}/images'_ folder.
 * Overall statistics of the video(s) relevant to a particular coding scheme are saved in the _'{HEAD}/images/{coding scheme}/{video id}'_ folder.
 * Emotion-specific results are saved in _'{HEAD}/images/{coding scheme}/{video id}/{emotion}.png'_. 
 
-**Sequencing:** _EmoInfer_ also supports the extraction of important sequences from the inferred emotions in the video. 
+**4. Sequencing:** _EmoInfer_ also supports the extraction of important sequences from the inferred emotions in the video. 
+* After the extraction of emotion sequences, three files are saved in the _'{HEAD}/sequencing/{coding scheme}/{video id}'_ folder, with the details of emotion sequences inferred for each coding scheme and video.
+  * _'final_sequences.txt'_: sequences of multiple lengths
+
+  * _'final_mult_sequences.txt'_: sequences comprising multiple emotions
+
+  * _'final_uniq_sequences.txt'_: sequences for every unique emotion
 * Suggested methodological choices and the underlying rationale can be found [here](https://tinyurl.com/EmoInferSeq).
+
+
+## Note
+
+Steps 2 (emotion inference), 3 (analysis) and 4 (sequencing) use the intermediate files generated from step 1 (facial action unit extraction). As long as those intermediate files have been generated apriori, steps 2, 3 and 4 do not need to be performed sychronously. This allows, for example, picking up previously unfinished analyses at a later point in time. For asynchronous analyses, simply upload the corresponding video file to _EmoInfer_ and directly proceed with steps 2, 3 or 4.
 
 
 ## Citation
