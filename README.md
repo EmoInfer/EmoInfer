@@ -38,12 +38,12 @@ To run _EmoInfer_,
 * Emotion-specific results are saved in _'{HEAD}/images/{coding scheme}/{video id}/{emotion}.png'_. 
 
 **4. Sequencing:** _EmoInfer_ also supports the extraction of important sequences from the inferred emotions in the video. 
-* After the extraction of emotion sequences, three files are saved in the _'{HEAD}/sequencing'_ folder, with the details of emotion sequences inferred for each coding scheme
-  * _'final_sequences\_{coding scheme}\_{video id}.txt'_: sequences of multiple lengths
+* After the extraction of emotion sequences, three files are saved in the _'{HEAD}/sequencing/{coding scheme}/{video id}'_ folder, with the details of emotion sequences inferred for each coding scheme
+  * _'final_sequences.txt'_: sequences of multiple lengths
 
-  * _'final_mult_sequences\_{coding scheme}\_{video id}.txt'_: sequences comprising multiple emotions
+  * _'final_mult_sequences.txt'_: sequences comprising multiple emotions
 
-  * _'final_uniq_sequences\_{coding scheme}\_{video id}.txt'_: sequences for every unique emotion
+  * _'final_uniq_sequences.txt'_: sequences for every unique emotion
 * Suggested methodological choices and the underlying rationale can be found [here](https://tinyurl.com/EmoInferSeq).
 
 
