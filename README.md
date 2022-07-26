@@ -21,6 +21,9 @@ To run _EmoInfer_,
 
 ## Functionality and Use
 
+![app_flow \label{diag}](https://user-images.githubusercontent.com/48733306/181093174-650427ae-54cc-4bc3-af88-f83ad3bc5e37.png)
+
+
 **1. Facial Action Unit Extraction:** _EmoInfer_ provides options of using binary or continuous facial action unit extraction.
 * To incorporate action units 53 (head up) and 54 (head down), the head pose threshold for pitch can be set (i.e., the rotation in radians around the X axis; 1 radian = 57.3 deg). 
 * To incorporate action units 55 (head tilt left) and 56 (head tilt right), the head pose threshold for roll can be set (i.e., the rotation in radians around the Z axis; 1 radian = 57.3 deg).
@@ -49,8 +52,9 @@ To run _EmoInfer_,
 
 ## Note
 
-Steps 2 (emotion inference), 3 (analysis) and 4 (sequencing) use the intermediate files generated from step 1 (facial action unit extraction). As long as those intermediate files have been generated apriori, steps 2, 3 and 4 do not need to be performed sychronously. This allows, for example, picking up previously unfinished analyses at a later point in time. For asynchronous analyses, simply upload the corresponding video file to _EmoInfer_ and directly proceed with steps 2, 3 or 4.
 
+* Steps 3 (analysis) and 4 (sequencing) use the intermediate files generated from steps 1 (facial action unit extraction) and 2 (emotion inference). As long as those intermediate files have been generated apriori, steps 3 and 4 do not need to be performed sychronously. This allows, for example, picking up previously unfinished analyses at a later point in time. For asynchronous analyses, simply upload the corresponding video file to _EmoInfer_ and directly proceed with steps 3 or 4.
+*  Steps 3 and 4 are independent of each other and can be performed in any order.
 
 ## Citation
 
