@@ -99,6 +99,8 @@ class VideoWindow(QMainWindow):
 
         self.INDEPENDENT = 1
         self.COMBINED = 0
+        self.vid_res = {}
+        self.combined_filename = ""
 
         self.bin_hidden = True
         self.con_hidden = True
@@ -235,6 +237,7 @@ class VideoWindow(QMainWindow):
         self.vid_res = {}
         filenames = self.videos_wid.currentData()
         filename = "".join(filenames)
+        self.combined_filename = filename
         paper = self.paper.currentText()
         paper = paper.split(' ')[0]
         emotion = self.emotion.currentText()
@@ -242,53 +245,39 @@ class VideoWindow(QMainWindow):
         res = coman.CombFreqAnalysis(filenames, len(filenames), paper, emotion)
         self.vid_res[filename] = {'per':res[0], 'data_to_plot1':res[1], 'inds':res[2], 'medians':res[3], 'quartile1':res[4], 'quartile3':res[5], 'whiskers_min':res[6], 'whiskers_max':res[7]}
 
-        return "Done"
 
     def ind_analysis(self):
         self.INDEPENDENT = 1
         self.COMBINED = 0
         filenames = self.videos_wid.currentData()
         self.video_select.addItems(filenames)
-        # for i in range(self.videos_wid.model().rowCount()):
-        #     if self.videos_wid.model().item(i).checkState() == Qt.Checked:
-        #         filename = self.videos_wid.model().item(i).data()
-        #         # self.video_select.addItem(filename)
-        #         freqan.FreqAnalysis(filename, "extracted/extracted_{}.csv".format(filename), self.paper.currentText(), self.emotion.currentText())
 
-## following code is for multiprocessing 
-        # p_i = Process(target=self.execute_ind_analysis, args=())
-        # p_i.start()
-        # # input("Type any key to quit.")
-        # print("Waiting for graph window process to join...")
-        # p_i.join()
-        # print("Process joined successfully. C YA !")
-
-
-        self.execute_ind_analysis()
-        # worker = Worker(self.execute_ind_analysis) # Any other args, kwargs are passed to the run function
+        # self.execute_ind_analysis()
+        worker = Worker(self.execute_ind_analysis) # Any other args, kwargs are passed to the run function
         # worker.signals.result.connect(self.print_output)
-        # worker.signals.finished.connect(self.thread_complete)
-        # worker.signals.progress.connect(self.progress_fn)
+        worker.signals.finished.connect(self.thread_complete)
+        worker.signals.progress.connect(self.progress_fn)
 
         # # Execute
-        # self.threadpool.start(worker)  
+        self.threadpool.start(worker)  
         return "Done"
  
         # self.status.setText("")
     def com_analysis(self):
         self.INDEPENDENT = 0
         self.COMBINED = 1
-        self.video_select.clear()
+        # self.video_select.clear()
         self.video_select.addItem("Combined")
-        self.execute_com_analysis()
-        # worker = Worker(lambda: self.execute_com_analysis) # Any other args, kwargs are passed to the run function
+        # self.execute_com_analysis()
+        worker = Worker(self.execute_com_analysis) # Any other args, kwargs are passed to the run function
         # worker.signals.result.connect(self.print_output)
-        # worker.signals.finished.connect(self.thread_complete)
-        # worker.signals.progress.connect(self.progress_fn)
+        worker.signals.finished.connect(self.thread_complete)
+        worker.signals.progress.connect(self.progress_fn)
 
         # # Execute
-        # self.threadpool.start(worker)
+        self.threadpool.start(worker)
         # i = 0
+        return "Done"
 
         
     def show_analysis_figures(self):
@@ -296,8 +285,8 @@ class VideoWindow(QMainWindow):
         paper = self.paper.currentText()
         paper = paper.split(' ')[0]
         emotion = self.emotion.currentText()
-        if self.COMBINED == 1:
-            filename = ''.join(self.videos_wid.currentData())
+        if self.COMBINED == 1 or filename == "Combined":
+            filename = self.combined_filename
 
         per = self.vid_res[filename]['per']
         data_to_plot1 = self.vid_res[filename]['data_to_plot1']
@@ -310,7 +299,7 @@ class VideoWindow(QMainWindow):
 
         if not os.path.exists(f"images/{paper}/{filename}/"):
             os.makedirs(f"images/{paper}/{filename}/")
-            
+
         plt.figure()
         i = 0
         if paper == "Cordaro":
