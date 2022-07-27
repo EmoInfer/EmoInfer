@@ -16,7 +16,7 @@ def seq_analysis(filenames, n_videos, paper, hyp):
     filename = "".join(filenames)
     dfs = []
     for i in range(n_videos):
-        df = pd.read_csv('extracted/extracted_{}.csv'.format(filenames[i]), delimiter=',')
+        df = pd.read_csv('extracted/extracted_{}.csv'.format(filenames[i]), delimiter=',', skipinitialspace=True)
         df.fillna('', inplace=True)
         # print(df)
         dfs.append(df)

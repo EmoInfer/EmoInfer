@@ -13,9 +13,9 @@ import sys
 def ExtractEmotion(arg, filename, auint, poserx, poserz):
 # In[12]:
 
-    df = pd.read_csv(arg, delimiter=',')
+    df = pd.read_csv(arg, delimiter=',', skipinitialspace=True)
 
-    emo_df = pd.read_csv('au_to_emotion.csv', delimiter=',', names=('Emotion', 'Cor', 'Kel', 'Du', 'PhyDes'))
+    emo_df = pd.read_csv('au_to_emotion.csv', delimiter=',', skipinitialspace=True, names=('Emotion', 'Cor', 'Kel', 'Du', 'PhyDes'))
     # print(df)
     # valid when <1000 ppl in video
 

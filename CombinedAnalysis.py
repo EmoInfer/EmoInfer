@@ -16,11 +16,11 @@ def CombFreqAnalysis(filenames, n_videos, paper, emotion):
     filename = "".join(filenames)
     dfs = []
     for i in range(n_videos):
-        df = pd.read_csv('extracted/extracted_{}.csv'.format(filenames[i]), delimiter=',')
+        df = pd.read_csv('extracted/extracted_{}.csv'.format(filenames[i]), delimiter=',', skipinitialspace=True)
         df.fillna('', inplace=True)
         # print(df)
         dfs.append(df)
-    emo_df = pd.read_csv('au_to_emotion.csv', delimiter=',', names=('Emotion', 'Cor', 'Kel', 'Du', 'PhyDes'))
+    emo_df = pd.read_csv('au_to_emotion.csv', delimiter=',', skipinitialspace=True, names=('Emotion', 'Cor', 'Kel', 'Du', 'PhyDes'))
     emo_df = emo_df.iloc[1: , :]
     emos = pd.array(emo_df['Emotion'], dtype="string")
     emos_2 = list(emos)
