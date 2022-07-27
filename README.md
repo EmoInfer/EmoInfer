@@ -54,7 +54,7 @@ To run _EmoInfer_,
 
 * Steps 3 (analysis) and 4 (sequencing) use the intermediate files generated from steps 1 (facial action unit extraction) and 2 (emotion inference). As long as those intermediate files have been generated apriori, steps 3 and 4 do not need to be performed synchronously. This allows, for example, picking up previously unfinished analyses at a later point in time. For asynchronous analyses, simply upload the corresponding video file to _EmoInfer_ and directly proceed with steps 3 or 4.
 * Steps 3 and 4 are independent of each other and can be performed in any order.
-* We recommend using python 3.7.3 to run _EmoInfer_. 
+* We recommend using python 3.7.3 and above to run _EmoInfer_. 
 
 ## Citation
 
