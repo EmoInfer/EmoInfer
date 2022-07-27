@@ -21,10 +21,10 @@ def adjacent_values(vals, q1, q3):
 
 def FreqAnalysis(filename, path, paper, emotion):
 # In[164]:
-    df = pd.read_table(path, delimiter=',')
+    df = pd.read_csv(path, delimiter=',')
     df.fillna('', inplace=True)
     # print(df)
-    emo_df = pd.read_table('au_to_emotion.csv', delimiter=',', names=('Emotion', 'Cor', 'Kel', 'Du', 'PhyDes'))
+    emo_df = pd.read_csv('au_to_emotion.csv', delimiter=',', names=('Emotion', 'Cor', 'Kel', 'Du', 'PhyDes'))
     emo_df = emo_df.iloc[1: , :]
     emos = pd.array(emo_df['Emotion'], dtype="string")
 
@@ -395,7 +395,7 @@ def FreqAnalysis(filename, path, paper, emotion):
         plt.xlabel("Experiment Condition")
         plt.ylabel("percentage")
 
-        # set style for the axes
+        # set style for the axesmain thr
     #     labels = ['A', 'B', 'C', 'D']
     #     for ax in [ax1, ax2]:
     #         set_axis_style(ax, labels)
