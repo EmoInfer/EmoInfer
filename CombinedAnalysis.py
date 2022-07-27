@@ -22,7 +22,7 @@ def CombFreqAnalysis(filenames, n_videos, paper, emotion):
         dfs.append(df)
     emo_df = pd.read_csv('au_to_emotion.csv', delimiter=',', skipinitialspace=True, names=('Emotion', 'Cor', 'Kel', 'Du', 'PhyDes'))
     emo_df = emo_df.iloc[1: , :]
-    emos = pd.array(emo_df['Emotion'], dtype="string")
+    emos = pd.array(emo_df['Emotion'], dtype="str")
     emos_2 = list(emos)
     combined_df = pd.DataFrame()
     fac = 0
