@@ -78,7 +78,7 @@ def seq_analysis(filenames, n_videos, paper, hyp):
             
     f_1.close()
 
-    os.system(f"java -jar spmf.jar run Fournier08-Closed+time sequencing/{paper}/{filename}/raw_sequences.txt sequencing/{paper}/{filename}/temp_output_sequences.txt {hyp[0]}% {hyp[1]} {hyp[2]} {hyp[3]} {hyp[4]}")
+    os.system(f"java -jar spmf.jar run Fournier08-Closed+time \"sequencing/{paper}/{filename}/raw_sequences.txt\" \"sequencing/{paper}/{filename}/temp_output_sequences.txt\" {hyp[0]}% {hyp[1]} {hyp[2]} {hyp[3]} {hyp[4]}")
 
     # subprocess.run("java -jar ../spmf.jar run Fournier08-Closed+time sequencing/Cordaro_raw_sequences.txt sequencing/output_Cordaro_sequences.txt 75% 15 45 15 45", shell = True)
     # subprocess.run("java -jar ../spmf.jar run Fournier08-Closed+time sequencing/Keltner_raw_sequences.txt sequencing/output_Keltner_sequences.txt 75% 15 45 15 45", shell = True)
