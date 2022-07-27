@@ -26,7 +26,7 @@ def FreqAnalysis(filename, path, paper, emotion):
     # print(df)
     emo_df = pd.read_csv('au_to_emotion.csv', delimiter=',', skipinitialspace=True, names=('Emotion', 'Cor', 'Kel', 'Du', 'PhyDes'))
     emo_df = emo_df.iloc[1: , :]
-    emos = pd.array(emo_df['Emotion'], dtype="string")
+    emos = pd.array(emo_df['Emotion'], dtype="str")
 
     n_faces = df['face_id'].max() + 1
 

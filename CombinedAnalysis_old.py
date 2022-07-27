@@ -25,7 +25,7 @@ def CombFreqAnalysis(filenames, n_videos):
     # # print(df)
     # emo_df = pd.read_csv('au_to_emotion.csv', delimiter=',', skipinitialspace=True, names=('Emotion', 'Cor', 'Kel', 'Du', 'PhyDes'))
     # emo_df = emo_df.iloc[1: , :]
-    # emos = pd.array(emo_df['Emotion'], dtype="string")
+    # emos = pd.array(emo_df['Emotion'], dtype="str")
 
     # n_videos no. of videos 
     # n_videos = 2
@@ -38,7 +38,7 @@ def CombFreqAnalysis(filenames, n_videos):
         dfs.append(df)
     emo_df = pd.read_csv('au_to_emotion.csv', delimiter=',', skipinitialspace=True, names=('Emotion', 'Cor', 'Kel', 'Du', 'PhyDes'))
     emo_df = emo_df.iloc[1: , :]
-    emos = pd.array(emo_df['Emotion'], dtype="string")
+    emos = pd.array(emo_df['Emotion'], dtype="str")
     combined_df = pd.DataFrame()
     fac = 0
     for i in range(n_videos):

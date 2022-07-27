@@ -52,9 +52,9 @@ To run _EmoInfer_,
 
 ## Note
 
-
 * Steps 3 (analysis) and 4 (sequencing) use the intermediate files generated from steps 1 (facial action unit extraction) and 2 (emotion inference). As long as those intermediate files have been generated apriori, steps 3 and 4 do not need to be performed synchronously. This allows, for example, picking up previously unfinished analyses at a later point in time. For asynchronous analyses, simply upload the corresponding video file to _EmoInfer_ and directly proceed with steps 3 or 4.
 * Steps 3 and 4 are independent of each other and can be performed in any order.
+* We recommend using python 3.7.3 and above to run _EmoInfer_. 
 
 ## Citation
 
@@ -62,7 +62,7 @@ If you use _EmoInfer_ in your work and/or publications, we ask you to kindly cit
 
 **Overall system**
 
-Sinha, T., Dhandhania, S. (2022). Democratizing Emotion Research in Learning Sciences. In: Rodrigo, M.M., Matsuda, N., Cristea, A.I., Dimitrova, V. (eds) _Artificial Intelligence in Education_. Lecture Notes in Computer Science, vol 13356. Springer, Cham. doi: 10.1007/978-3-031-11647-6_27
+Sinha, T., Dhandhania, S. 2022. Democratizing Emotion Research in Learning Sciences. In: Rodrigo, M.M., Matsuda, N., Cristea, A.I., Dimitrova, V. (eds) _Artificial Intelligence in Education_. Lecture Notes in Computer Science, vol 13356. Springer, Cham. doi: 10.1007/978-3-031-11647-6_27
 
 **Empirical evidence based on the _EmoInfer_ pipeline**
 
