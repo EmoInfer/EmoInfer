@@ -373,6 +373,10 @@ class VideoWindow(QMainWindow):
             filename = filename.partition(".")[0]
             # print(filename)
             arg = "processed/{}.csv".format(filename)
+
+            #create directory
+            if not os.path.exists(f"extracted/"):
+                os.makedirs(f"extracted/")
             # print(au.ExtractEmotion(arg))
             self.emos, self.extractedpath[i] = au.ExtractEmotion(arg, filename, AUint, poseRx, poseRz)
             # freqan.FreqAnalysis(extractedpath)
@@ -447,6 +451,10 @@ class VideoWindow(QMainWindow):
         hyp.append(self.maxsucc.value())
         hyp.append(self.minfl.value())
         hyp.append(self.maxfl.value())
+
+        #create directory
+        if not os.path.exists(f"sequencing/"):
+            os.makedirs(f"sequencing/")
 
         if filenames == []:
             self.errorlabel.show()
