@@ -21,7 +21,7 @@ To run _EmoInfer_,
 
 ## Functionality and Use
 
-![app_flow \label{diag}](https://user-images.githubusercontent.com/48733306/181093174-650427ae-54cc-4bc3-af88-f83ad3bc5e37.png)
+![EmoInferREADME drawio](https://user-images.githubusercontent.com/48733306/181459962-473db2b8-7f54-4212-a8c6-baf55ee28a81.png)
 
 
 **1. Facial Action Unit Extraction:** _EmoInfer_ provides options of using binary or continuous facial action unit extraction.
