@@ -29,7 +29,7 @@ To run _EmoInfer_,
 * To incorporate action units 55 (head tilt left) and 56 (head tilt right), the head pose threshold for roll can be set (i.e., the rotation in radians around the Z axis; 1 radian = 57.3 deg).
 * For continuous facial action units, a cutoff intensity above which a facial action unit is considered active needs to be specified (on a scale of 1 to 5). 
   * We recommend conducting sensitivity analyses to set this cutoff for your data. For ecologically-valid learning situations, facial action unit intensities can be expected to be moderate on average. Individual differences (e.g., some students maybe more expressive than others or take longer to return to baseline facial configurations), however may affect this cutoff.
-* Facial action units detected in the uploaded video(s) are saved per frame in a file called _'{filename}.csv'_ in the _'{HEAD}/processed'_ folder.
+* Facial action units detected in the uploaded video(s) are saved per frame in _'{filename}.csv'_ in the _'{HEAD}/processed'_ folder.
 
 
 **2. Emotion Inference:** _EmoInfer_ infers emotions from the extracted facial action units, drawing on three culturally-generalizable coding schemes outlined in [Sinha et al., JLS, 2022](https://www.tandfonline.com/doi/full/10.1080/10508406.2021.1964506).
