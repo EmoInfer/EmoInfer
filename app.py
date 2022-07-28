@@ -32,19 +32,26 @@ class VideoWindow(QMainWindow):
         super(VideoWindow, self).__init__(parent)
         uic.loadUi("app.ui", self)
 
-        self.inp_video = self.findChild(QLabel, "inpvideo")
         self.filenames = []
 
-        self.play.setEnabled(False)
-        self.play.setIcon(self.style().standardIcon(QStyle.SP_MediaPlay))
-        self.play.clicked.connect(self.play_video)
+### VIDEO PLAYER
+        self.playbutton.setEnabled(False)
+        self.playbutton.setIcon(self.style().standardIcon(QStyle.SP_MediaPlay))
+        # self.play.clicked.connect(self.play_video)
+        self.playbutton.clicked.connect(self.play_video)
         self.slider.setRange(0,0)
         self.slider.sliderMoved.connect(self.set_position)
 
-
-        self.vidwidget = self.findChild(QVideoWidget,"vidplayer" )
+        self.vidwidget = QVideoWidget()
+        self.verticalLayout_vid.addWidget(self.vidwidget)
+        # self.vidwidget = self.findChild(QVideoWidget,"vidwidget" )
         self.vidplayer = QMediaPlayer(None, QMediaPlayer.VideoSurface)
         self.vidplayer.setVideoOutput(self.vidwidget)
+
+        self.vidplayer.stateChanged.connect(self.mediastate_changed)
+        self.vidplayer.positionChanged.connect(self.position_changed)
+        self.vidplayer.durationChanged.connect(self.duration_changed)
+### VIDEO PLAYER
 
         self.videos_wid = CheckableComboBox()
         self.videos_wid2 = CheckableComboBox()
@@ -92,11 +99,8 @@ class VideoWindow(QMainWindow):
 
         self.INDEPENDENT = 1
         self.COMBINED = 0
-
-        self.vidplayer.stateChanged.connect(self.mediastate_changed)
-        self.vidplayer.positionChanged.connect(self.position_changed)
-        self.vidplayer.durationChanged.connect(self.duration_changed)
-
+        self.vid_res = {}
+        self.combined_filename = ""
 
         self.bin_hidden = True
         self.con_hidden = True
@@ -115,18 +119,20 @@ class VideoWindow(QMainWindow):
             self.vidplayer.pause()
  
         else:
+            # self.vidplayer.setVideoOutput(self.vidwidget)
             self.vidplayer.play()
+
  
  
     def mediastate_changed(self, state):
         if self.vidplayer.state() == QMediaPlayer.PlayingState:
-            self.play.setIcon(
+            self.playbutton.setIcon(
                 self.style().standardIcon(QStyle.SP_MediaPause)
  
             )
  
         else:
-            self.play.setIcon(
+            self.playbutton.setIcon(
                 self.style().standardIcon(QStyle.SP_MediaPlay)
  
             )
@@ -194,7 +200,8 @@ class VideoWindow(QMainWindow):
             self.inp_video.setText('Input video(s): {}'.format(','.join([pth.split('/')[-1] for pth in path[0]])))
             self.vidplayer.setMedia(QMediaContent(QtCore.QUrl.fromLocalFile(self.filenames[0])))
             # self.vidplayer.setVideoOutput(self.vidwidget)
-            self.play.setEnabled(True)
+            self.playbutton.setEnabled(True)
+            self.vidplayer.play()
         self.errorlabel.hide()
         i = 0
         for file in self.filenames:
@@ -227,55 +234,50 @@ class VideoWindow(QMainWindow):
                 
 
     def execute_com_analysis(self):
+        self.vid_res = {}
         filenames = self.videos_wid.currentData()
+        filename = "".join(filenames)
+        self.combined_filename = filename
+        paper = self.paper.currentText()
+        paper = paper.split(' ')[0]
+        emotion = self.emotion.currentText()
         # self.video_select.addItems(filenames)
-        coman.CombFreqAnalysis(filenames, len(filenames))
-        return "Done"
+        res = coman.CombFreqAnalysis(filenames, len(filenames), paper, emotion)
+        self.vid_res[filename] = {'per':res[0], 'data_to_plot1':res[1], 'inds':res[2], 'medians':res[3], 'quartile1':res[4], 'quartile3':res[5], 'whiskers_min':res[6], 'whiskers_max':res[7]}
+
 
     def ind_analysis(self):
         self.INDEPENDENT = 1
         self.COMBINED = 0
         filenames = self.videos_wid.currentData()
         self.video_select.addItems(filenames)
-        # for i in range(self.videos_wid.model().rowCount()):
-        #     if self.videos_wid.model().item(i).checkState() == Qt.Checked:
-        #         filename = self.videos_wid.model().item(i).data()
-        #         # self.video_select.addItem(filename)
-        #         freqan.FreqAnalysis(filename, "extracted/extracted_{}.csv".format(filename), self.paper.currentText(), self.emotion.currentText())
 
-## following code is for multiprocessing 
-        # p_i = Process(target=self.execute_ind_analysis, args=())
-        # p_i.start()
-        # # input("Type any key to quit.")
-        # print("Waiting for graph window process to join...")
-        # p_i.join()
-        # print("Process joined successfully. C YA !")
-
-
-        self.execute_ind_analysis()
-        # worker = Worker(self.execute_ind_analysis) # Any other args, kwargs are passed to the run function
+        # self.execute_ind_analysis()
+        worker = Worker(self.execute_ind_analysis) # Any other args, kwargs are passed to the run function
         # worker.signals.result.connect(self.print_output)
-        # worker.signals.finished.connect(self.thread_complete)
-        # worker.signals.progress.connect(self.progress_fn)
+        worker.signals.finished.connect(self.thread_complete)
+        worker.signals.progress.connect(self.progress_fn)
 
         # # Execute
-        # self.threadpool.start(worker)  
+        self.threadpool.start(worker)  
         return "Done"
  
         # self.status.setText("")
     def com_analysis(self):
         self.INDEPENDENT = 0
         self.COMBINED = 1
-        self.video_select.clear()
-        self.execute_com_analysis()
-        # worker = Worker(lambda: self.execute_com_analysis) # Any other args, kwargs are passed to the run function
+        # self.video_select.clear()
+        self.video_select.addItem("Combined")
+        # self.execute_com_analysis()
+        worker = Worker(self.execute_com_analysis) # Any other args, kwargs are passed to the run function
         # worker.signals.result.connect(self.print_output)
-        # worker.signals.finished.connect(self.thread_complete)
-        # worker.signals.progress.connect(self.progress_fn)
+        worker.signals.finished.connect(self.thread_complete)
+        worker.signals.progress.connect(self.progress_fn)
 
         # # Execute
-        # self.threadpool.start(worker)
+        self.threadpool.start(worker)
         # i = 0
+        return "Done"
 
         
     def show_analysis_figures(self):
@@ -283,82 +285,85 @@ class VideoWindow(QMainWindow):
         paper = self.paper.currentText()
         paper = paper.split(' ')[0]
         emotion = self.emotion.currentText()
-        if self.INDEPENDENT == 1:
-            # [per, data_to_plot1, inds, medians, quartile1, quartile3, whiskers_min, whiskers_max]
-            per = self.vid_res[filename]['per']
-            data_to_plot1 = self.vid_res[filename]['data_to_plot1']
-            inds = self.vid_res[filename]['inds']
-            medians = self.vid_res[filename]['medians']
-            quartile1 = self.vid_res[filename]['quartile1']
-            quartile3 = self.vid_res[filename]['quartile3']
-            whiskers_min = self.vid_res[filename]['whiskers_min']
-            whiskers_max = self.vid_res[filename]['whiskers_max']
+        if self.COMBINED == 1 or filename == "Combined":
+            filename = self.combined_filename
 
-            plt.figure()
-            i = 0
-            if paper == "Cordaro":
-                emos = self.emo_list[0:13]
-            if paper == "Keltner":
-                emos = self.emo_list[0:15]
-            if paper == "Du":
-                emos = self.emo_list
-            max_val = 0
-            max_emo = emotion
-            for emo in emos:
-                plt.bar([i+1],[per[i][paper + '_'].sum()], label=emo)
-                if max_val < per[i][paper + '_'].sum():
-                    max_val = per[i][paper + '_'].sum()
-                    max_emo = emo                
-                i += 1
-            # pap = "Cordaro et al., 2018"
-            plt.legend(loc='best')
-            plt.ylabel('# of frames x # of faces')
-            plt.xlabel('Emotion')
-            plt.title(label=paper+" et al.")
-            plt.savefig(f"images/{paper}_{filename}.png")
-            plt.close()
+        per = self.vid_res[filename]['per']
+        data_to_plot1 = self.vid_res[filename]['data_to_plot1']
+        inds = self.vid_res[filename]['inds']
+        medians = self.vid_res[filename]['medians']
+        quartile1 = self.vid_res[filename]['quartile1']
+        quartile3 = self.vid_res[filename]['quartile3']
+        whiskers_min = self.vid_res[filename]['whiskers_min']
+        whiskers_max = self.vid_res[filename]['whiskers_max']
 
-            ## start with emotion specific
+        if not os.path.exists(f"images/{paper}/{filename}/"):
+            os.makedirs(f"images/{paper}/{filename}/")
 
-            fig = plt.figure()
+        plt.figure()
+        i = 0
+        if paper == "Cordaro":
+            emos = self.emo_list[0:13]
+        if paper == "Keltner":
+            emos = self.emo_list[0:15]
+        if paper == "Du":
+            emos = self.emo_list
+        max_val = 0
+        max_emo = emotion
+        for emo in emos:
+            plt.bar([i+1],[per[i][paper + '_'].sum()], label=emo)
+            if max_val < per[i][paper + '_'].sum():
+                max_val = per[i][paper + '_'].sum()
+                max_emo = emo                
+            i += 1
+        # pap = "Cordaro et al., 2018"
+        plt.legend(loc='best')
+        plt.ylabel('# of frames x # of faces')
+        plt.xlabel('Emotion')
+        plt.title(label=paper+" et al.")
+        plt.savefig(f"images/{paper}/{filename}/FreqBarGraph.png")
+        plt.close()
 
-            # Create an axes instance
-            ax = fig.add_axes([0,0,1,1])
+        ## start with emotion specific
 
-            # Create the boxplot
-            parts = ax.violinplot(data_to_plot1, showmeans=True, showmedians=True, showextrema=True)
-            for pc in parts['bodies']:
-                pc.set_facecolor('white')
-                pc.set_edgecolor('black')
-                pc.set_alpha(1)
+        fig = plt.figure()
 
-            ax.scatter(inds, medians, marker='o', color='white', s=30, zorder=3)
-            ax.vlines(inds, quartile1, quartile3, color='k', linestyle='-', lw=5)
-            ax.vlines(inds, whiskers_min, whiskers_max, color='k', linestyle='-', lw=1)
-            plt.ylim(0, 100)
-            plt.xlim(0,2)
-            # plt.legend(loc='best')
-            plt.title(emotion)
-            plt.xlabel(paper+" et al.")
-            plt.ylabel("percentage")
-            plt.savefig(f"images/{paper}{emotion}_{filename}.png", bbox_inches='tight')
-            plt.close(fig)
-            
+        # Create an axes instance
+        ax = fig.add_axes([0,0,1,1])
+
+        # Create the boxplot
+        parts = ax.violinplot(data_to_plot1, showmeans=True, showmedians=True, showextrema=True)
+        for pc in parts['bodies']:
+            pc.set_facecolor('white')
+            pc.set_edgecolor('black')
+            pc.set_alpha(1)
+
+        ax.scatter(inds, medians, marker='o', color='white', s=30, zorder=3)
+        ax.vlines(inds, quartile1, quartile3, color='k', linestyle='-', lw=5)
+        ax.vlines(inds, whiskers_min, whiskers_max, color='k', linestyle='-', lw=1)
+        plt.ylim(0, 100)
+        plt.xlim(0,2)
+        # plt.legend(loc='best')
+        plt.title(emotion)
+        plt.xlabel(paper+" et al.")
+        plt.ylabel("percentage")
+        plt.savefig(f"images/{paper}/{filename}/{emotion}.png", bbox_inches='tight')
+        plt.close(fig)
+        
+        try:
             std2 = stats.stdev(data_to_plot1[0])
-            mn2 = stats.mean(data_to_plot1[0])
-            intrng2_first, intrng2_second = np.percentile(data_to_plot1[0], [75,25])
-            intrng2 = intrng2_first - intrng2_second
-            
-            self.high_inc.setText("Emotion with highest incidence :  " + max_emo)
-            self.avg_inc.setText("Average %% emotion incidence = " + str("%.2f" % mn2))
-            self.std_dev.setText("Std. deviation (%  emotion incidence) = " + str("%.2f" % std2))
-            self.int_rng.setText("Interquartile range (%  emotion incidence) = " + str("%.2f" % intrng2))
-            self.paperimg.setPixmap(QPixmap(f"images/{paper}_{filename}.png"))
-            self.paperemo.setPixmap(QPixmap(f"images/{paper}{emotion}_{filename}.png"))
-        else:
-            name = ''.join(self.videos_wid.currentData())
-            self.paperimg.setPixmap(QPixmap(f"images/{paper}_{filename}.png"))
-            self.paperemo.setPixmap(QPixmap(f"images/{paper}{emotion}_{filename}.png"))
+        except:
+            std2 = -1
+        mn2 = stats.mean(data_to_plot1[0])
+        intrng2_first, intrng2_second = np.percentile(data_to_plot1[0], [75,25])
+        intrng2 = intrng2_first - intrng2_second
+        
+        self.high_inc.setText("Emotion with highest incidence :  " + max_emo)
+        self.avg_inc.setText("Average % emotion incidence = " + str("%.2f" % mn2))
+        self.std_dev.setText("Std. deviation (%  emotion incidence) = " + str("%.2f" % std2))
+        self.int_rng.setText("Interquartile range (%  emotion incidence) = " + str("%.2f" % intrng2))
+        self.paperimg.setPixmap(QPixmap(f"images/{paper}/{filename}/FreqBarGraph.png"))
+        self.paperemo.setPixmap(QPixmap(f"images/{paper}/{filename}/{emotion}.png"))
 
     def execute_AU_extract(self, AUint, poseRx, poseRz):
         os.system(OpenFacePath + "/build/bin/FaceLandmarkVidMulti -pose -aus -vis-track -vis-aus -f \"{}\"".format('\" -f \"'.join(self.filenames)))
@@ -368,6 +373,10 @@ class VideoWindow(QMainWindow):
             filename = filename.partition(".")[0]
             # print(filename)
             arg = "processed/{}.csv".format(filename)
+
+            #create directory
+            if not os.path.exists(f"extracted/"):
+                os.makedirs(f"extracted/")
             # print(au.ExtractEmotion(arg))
             self.emos, self.extractedpath[i] = au.ExtractEmotion(arg, filename, AUint, poseRx, poseRz)
             # freqan.FreqAnalysis(extractedpath)
@@ -419,8 +428,8 @@ class VideoWindow(QMainWindow):
                 # return (res)
 # -pose -gaze -verbose
 
-    def execute_seq_analysis(self, filename, path, paper, hyp):
-        strs = seqan.seq_analysis(filename, path, paper, hyp)
+    def execute_seq_analysis(self, filenames, n_videos, paper, hyp):
+        strs = seqan.seq_analysis(filenames, n_videos, paper, hyp)
         return strs
 
     def output_seq(self, strs):
@@ -430,8 +439,8 @@ class VideoWindow(QMainWindow):
 
     def sequencing_func(self):
         filenames = self.videos_wid2.currentData()
-        filename = filenames[0]
-        path = "extracted/extracted_{}.csv".format(filename)
+        # filename = filenames[0]
+        # path = "extracted/extracted_{}.csv".format(filename)
         paper = self.paper_seq.currentText()
         paper = paper.split(' ')[0]
 
@@ -443,11 +452,15 @@ class VideoWindow(QMainWindow):
         hyp.append(self.minfl.value())
         hyp.append(self.maxfl.value())
 
+        #create directory
+        if not os.path.exists(f"sequencing/"):
+            os.makedirs(f"sequencing/")
+
         if filenames == []:
             self.errorlabel.show()
             self.errorlabel.setText("Error: Select video first")
         else:
-            worker = Worker(lambda: self.execute_seq_analysis(filename, path, paper, hyp)) # Any other args, kwargs are passed to the run function
+            worker = Worker(lambda: self.execute_seq_analysis(filenames, len(filenames), paper, hyp)) # Any other args, kwargs are passed to the run function
             worker.signals.result.connect(self.output_seq)
             worker.signals.finished.connect(self.thread_complete)
             worker.signals.progress.connect(self.progress_fn)

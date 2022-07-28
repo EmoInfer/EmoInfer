@@ -18,12 +18,12 @@ def adjacent_values(vals, q1, q3):
 
 def FreqAnalysis(filename, path, paper, emotion):
 # In[164]:
-    df = pd.read_table(path, delimiter=',')
+    df = pd.read_csv(path, delimiter=',', skipinitialspace=True)
     df.fillna('', inplace=True)
     # print(df)
-    emo_df = pd.read_table('au_to_emotion.csv', delimiter=',', names=('Emotion', 'Cor', 'Kel', 'Du', 'PhyDes'))
+    emo_df = pd.read_csv('au_to_emotion.csv', delimiter=',', skipinitialspace=True, names=('Emotion', 'Cor', 'Kel', 'Du', 'PhyDes'))
     emo_df = emo_df.iloc[1: , :]
-    emos = pd.array(emo_df['Emotion'], dtype="string")
+    emos = pd.array(emo_df['Emotion'], dtype="str")
     emos_2 = list(emos)
     n_faces = df['face_id'].max() + 1
 

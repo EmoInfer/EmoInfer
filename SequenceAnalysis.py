@@ -12,11 +12,27 @@ import sys, os
 import subprocess
 
 
-def seq_analysis(filename, path, paper, hyp):
+def seq_analysis(filenames, n_videos, paper, hyp):
+    filename = "".join(filenames)
+    dfs = []
+    for i in range(n_videos):
+        df = pd.read_csv('extracted/extracted_{}.csv'.format(filenames[i]), delimiter=',', skipinitialspace=True)
+        df.fillna('', inplace=True)
+        # print(df)
+        dfs.append(df)
 
-    df = pd.read_table(path, delimiter=',')
-    df.fillna('', inplace=True)
-    #print(df)
+    combined_df = pd.DataFrame()
+    fac = 0
+    for i in range(n_videos):
+        fcs = dfs[i]['face_id'].max() + 1
+        dfs[i]['face_id'] = dfs[i]['face_id'] + fac
+        fac = fac + fcs
+        # print(dfs[i])
+        combined_df = combined_df.append(dfs[i])
+        
+    # print(combined_df)
+
+    df = combined_df
 
     emos = [            'Amusement',             'Happiness',                   'Awe',
                     'Pride',              'Surprise',                 'Anger',
@@ -39,7 +55,10 @@ def seq_analysis(filename, path, paper, hyp):
     # f2 = open("sequencing/Keltner_raw_sequences.txt", 'w+')
     # f3 = open("sequencing/Du_raw_sequences.txt", 'w+')
 
-    f_1 = open(f"sequencing/{paper}_{filename}_raw_sequences.txt", 'w+')
+    if not os.path.exists(f"sequencing/{paper}/{filename}/"):
+        os.makedirs(f"sequencing/{paper}/{filename}/")
+
+    f_1 = open(f"sequencing/{paper}/{filename}/raw_sequences.txt", 'w+')
 
     # COR, KEL,DU
     fcs = np.array(df.face_id)
@@ -52,21 +71,21 @@ def seq_analysis(filename, path, paper, hyp):
         for ind, row in df1.iterrows():
     #         #print(row['Cordaro'])
             if row[paper] is not "":
-                f_1.write('<' + str(row['frame']) + '> ' + ' '.join(row['Cordaro'].split(", ")) + ' -1 ')
+                f_1.write('<' + str(row['frame']) + '> ' + ' '.join(row[paper].split(", ")) + ' -1 ')
                 flag_a = 1
         if flag_a:
             f_1.write('-2\n')
             
     f_1.close()
 
-    os.system(f"java -jar spmf.jar run Fournier08-Closed+time sequencing/{paper}_{filename}_raw_sequences.txt sequencing/output_{paper}_{filename}_sequences.txt {hyp[0]}% {hyp[1]} {hyp[2]} {hyp[3]} {hyp[4]}")
+    os.system(f"java -jar spmf.jar run Fournier08-Closed+time \"sequencing/{paper}/{filename}/raw_sequences.txt\" \"sequencing/{paper}/{filename}/temp_output_sequences.txt\" {hyp[0]}% {hyp[1]} {hyp[2]} {hyp[3]} {hyp[4]}")
 
     # subprocess.run("java -jar ../spmf.jar run Fournier08-Closed+time sequencing/Cordaro_raw_sequences.txt sequencing/output_Cordaro_sequences.txt 75% 15 45 15 45", shell = True)
     # subprocess.run("java -jar ../spmf.jar run Fournier08-Closed+time sequencing/Keltner_raw_sequences.txt sequencing/output_Keltner_sequences.txt 75% 15 45 15 45", shell = True)
     # subprocess.run("java -jar ../spmf.jar run Fournier08-Closed+time sequencing/Du_raw_sequences.txt sequencing/output_Du_sequences.txt 75% 15 45 15 45", shell = True)
 
 
-    file_a = open(f"sequencing/output_{paper}_{filename}_sequences.txt", 'r')
+    file_a = open(f"sequencing/{paper}/{filename}/temp_output_sequences.txt", 'r')
 
     # file1 = open('sequencing/output_Cordaro_sequences.txt', 'r')
     # file2 = open('sequencing/output_Keltner_sequences.txt', 'r')
@@ -124,9 +143,13 @@ def seq_analysis(filename, path, paper, hyp):
 
     l = list(set_of_seq)
 
-    new_file = open(f"sequencing/final_sequences_{paper}_{filename}.txt", 'w+')
-    new_mult_emos = open(f"sequencing/final_mult_sequences_{paper}_{filename}.txt", 'w+')
-    new_uniq_emos = open(f"sequencing/final_uniq_sequences_{paper}_{filename}.txt", 'w+')
+    # new_file = open(f"sequencing/final_sequences_{paper}_{filename}.txt", 'w+')
+    # new_mult_emos = open(f"sequencing/final_mult_sequences_{paper}_{filename}.txt", 'w+')
+    # new_uniq_emos = open(f"sequencing/final_uniq_sequences_{paper}_{filename}.txt", 'w+')
+
+    new_file = open(f"sequencing/{paper}/{filename}/final_sequences.txt", 'w+')
+    new_mult_emos = open(f"sequencing/{paper}/{filename}/final_mult_sequences.txt", 'w+')
+    new_uniq_emos = open(f"sequencing/{paper}/{filename}/final_uniq_sequences.txt", 'w+')
 
 
     fin = []
@@ -170,6 +193,10 @@ def seq_analysis(filename, path, paper, hyp):
     #print(new_uniq_emos_l)
 
     new_uniq_emos.close()
+
+    new_uniq_emos_l = sorted(new_uniq_emos_l, key=len)
+    fin = sorted(fin, key=len)
+    mult_emo_l = sorted(mult_emo_l, key=len)
 
     uniq_str = '\n'.join(new_uniq_emos_l)
     mullen_str = '\n'.join(fin)
