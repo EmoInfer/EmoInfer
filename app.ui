@@ -743,8 +743,8 @@ p, li { white-space: pre-wrap; }
      <widget class="QPushButton" name="indanalysis">
       <property name="geometry">
        <rect>
-        <x>30</x>
-        <y>170</y>
+        <x>40</x>
+        <y>120</y>
         <width>261</width>
         <height>41</height>
        </rect>
@@ -762,8 +762,8 @@ p, li { white-space: pre-wrap; }
      <widget class="QPushButton" name="comanalysis">
       <property name="geometry">
        <rect>
-        <x>370</x>
-        <y>170</y>
+        <x>380</x>
+        <y>120</y>
         <width>261</width>
         <height>41</height>
        </rect>
@@ -781,8 +781,8 @@ p, li { white-space: pre-wrap; }
      <widget class="QLabel" name="label_4">
       <property name="geometry">
        <rect>
-        <x>300</x>
-        <y>180</y>
+        <x>310</x>
+        <y>130</y>
         <width>67</width>
         <height>17</height>
        </rect>
@@ -792,46 +792,6 @@ p, li { white-space: pre-wrap; }
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
-     <widget class="QSpinBox" name="fpsval">
-      <property name="geometry">
-       <rect>
-        <x>320</x>
-        <y>100</y>
-        <width>51</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <property name="minimum">
-       <number>1</number>
-      </property>
-      <property name="maximum">
-       <number>9000</number>
-      </property>
-      <property name="value">
-       <number>1</number>
-      </property>
-     </widget>
-     <widget class="QLabel" name="fps">
-      <property name="geometry">
-       <rect>
-        <x>30</x>
-        <y>100</y>
-        <width>281</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>13</pointsize>
-       </font>
-      </property>
-      <property name="text">
-       <string>  Time granularity (unit = 1 frame):</string>
-      </property>
-      <property name="textFormat">
-       <enum>Qt::AutoText</enum>
       </property>
      </widget>
      <widget class="QComboBox" name="paper">
@@ -903,8 +863,8 @@ p, li { white-space: pre-wrap; }
      <widget class="QLabel" name="avg_inc">
       <property name="geometry">
        <rect>
-        <x>850</x>
-        <y>360</y>
+        <x>860</x>
+        <y>330</y>
         <width>301</width>
         <height>31</height>
        </rect>
@@ -916,8 +876,8 @@ p, li { white-space: pre-wrap; }
      <widget class="QLabel" name="std_dev">
       <property name="geometry">
        <rect>
-        <x>850</x>
-        <y>390</y>
+        <x>860</x>
+        <y>360</y>
         <width>431</width>
         <height>31</height>
        </rect>
@@ -929,8 +889,8 @@ p, li { white-space: pre-wrap; }
      <widget class="QLabel" name="int_rng">
       <property name="geometry">
        <rect>
-        <x>850</x>
-        <y>420</y>
+        <x>860</x>
+        <y>390</y>
         <width>381</width>
         <height>31</height>
        </rect>
@@ -942,8 +902,8 @@ p, li { white-space: pre-wrap; }
      <widget class="QLabel" name="high_inc">
       <property name="geometry">
        <rect>
-        <x>850</x>
-        <y>330</y>
+        <x>860</x>
+        <y>300</y>
         <width>471</width>
         <height>31</height>
        </rect>
@@ -955,8 +915,8 @@ p, li { white-space: pre-wrap; }
      <widget class="QLabel" name="paperimg">
       <property name="geometry">
        <rect>
-        <x>30</x>
-        <y>330</y>
+        <x>40</x>
+        <y>300</y>
         <width>361</width>
         <height>281</height>
        </rect>
@@ -974,8 +934,8 @@ p, li { white-space: pre-wrap; }
      <widget class="QLabel" name="paperemo">
       <property name="geometry">
        <rect>
-        <x>460</x>
-        <y>330</y>
+        <x>470</x>
+        <y>300</y>
         <width>331</width>
         <height>281</height>
        </rect>
@@ -993,8 +953,8 @@ p, li { white-space: pre-wrap; }
      <widget class="QLabel" name="label_16">
       <property name="geometry">
        <rect>
-        <x>20</x>
-        <y>220</y>
+        <x>30</x>
+        <y>190</y>
         <width>221</width>
         <height>31</height>
        </rect>
@@ -1041,24 +1001,11 @@ p, li { white-space: pre-wrap; }
       </property>
       <layout class="QVBoxLayout" name="lay_vid"/>
      </widget>
-     <widget class="QLabel" name="label_12">
-      <property name="geometry">
-       <rect>
-        <x>20</x>
-        <y>130</y>
-        <width>461</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string> (e.g. - 1 frame = 1/30th s in a 30 fps video)</string>
-      </property>
-     </widget>
      <widget class="QWidget" name="horizontalLayoutWidget_5">
       <property name="geometry">
        <rect>
-        <x>10</x>
-        <y>250</y>
+        <x>20</x>
+        <y>220</y>
         <width>401</width>
         <height>61</height>
        </rect>
