@@ -16,7 +16,7 @@ def adjacent_values(vals, q1, q3):
     return lower_adjacent_value, upper_adjacent_value
 
 
-def FreqAnalysis(filename, path, paper, emotion):
+def FreqAnalysis(filename, path, paper, emotion, time_gran):
 # In[164]:
     df = pd.read_csv(path, delimiter=',', skipinitialspace=True)
     df.fillna('', inplace=True)
@@ -26,45 +26,158 @@ def FreqAnalysis(filename, path, paper, emotion):
     emos = pd.array(emo_df['Emotion'], dtype="str")
     emos_2 = list(emos)
     n_faces = df['face_id'].max() + 1
+    n = time_gran
 
     per = []
+    # i = 0
+    # for emo in emos:
+    # # emo = "Amusement"
+    #     filter1 = df['Cordaro'].str.find(emo) != -1
+    #     filter2 = df['Keltner'].str.find(emo) != -1
+    #     filter3 = df['Du'].str.find(emo) != -1
+
+    #     copy = df
+    #     cordf = copy.loc[filter1]
+    #     foo1 = cordf.groupby('face_id').count()
+    # #     print(newdf)
+    #     foo1 = foo1.add_suffix('_').reset_index()
+    #     cordf1 = foo1[['face_id','Cordaro_']]
+    # #     print(cordf1)
+        
+    #     keldf = copy.loc[filter2]
+    #     foo2 = keldf.groupby('face_id').count()
+    #     foo2 = foo2.add_suffix('_').reset_index()
+    #     keldf1 = foo2[['face_id','Keltner_']]
+        
+    #     dudf = copy.loc[filter3]
+    #     foo3 = dudf.groupby('face_id').count()
+    #     foo3 = foo3.add_suffix('_').reset_index()
+    #     dudf1 = foo3[['face_id','Du_']]
+        
+    #     result = pd.merge(cordf1, keldf1,how="outer", on="face_id")
+    #     result = pd.merge(result, dudf1,how="outer", on="face_id")
+    #     per.append(result)
+    #     i += 1
+
+#### FROM HERE
     i = 0
     for emo in emos:
-    # emo = "Amusement"
         filter1 = df['Cordaro'].str.find(emo) != -1
         filter2 = df['Keltner'].str.find(emo) != -1
         filter3 = df['Du'].str.find(emo) != -1
 
         copy = df
+
         cordf = copy.loc[filter1]
-        foo1 = cordf.groupby('face_id').count()
-    #     print(newdf)
-        foo1 = foo1.add_suffix('_').reset_index()
-        cordf1 = foo1[['face_id','Cordaro_']]
-    #     print(cordf1)
-        
+        tem = cordf.groupby('face_id')
+        cor_df1 = pd.DataFrame(columns = ['face_id', 'Cordaro_'])
+
+        for name, group in tem:
+            count_cor = 0
+            i_cor = 0
+            rows = group.shape[0]
+            while i_cor < rows:
+                f = group.iloc[i_cor, 1]
+                f_prev = f
+                rem = (f % n)
+                if rem == 0:
+                    rem = n
+                left = n - rem
+                temp = 1
+                i_cor += 1
+                while f <= (f_prev + left) and i_cor < rows:
+                    f = group.iloc[i_cor, 1]
+                    if f <= (f_prev + left):    
+                        temp += 1
+                    else:
+                        break
+                    i_cor += 1
+
+                if temp >= (n/2 + n%2) and n >= 2:
+                    count_cor += 1
+                if n == 1:
+                    count_cor += 1
+            cor_df1 = cor_df1.append({'face_id' : name, 'Cordaro_' : count_cor},
+                ignore_index = True)
+
         keldf = copy.loc[filter2]
-        foo2 = keldf.groupby('face_id').count()
-        foo2 = foo2.add_suffix('_').reset_index()
-        keldf1 = foo2[['face_id','Keltner_']]
-        
+
+        tem = keldf.groupby('face_id')
+        kel_df1 = pd.DataFrame(columns = ['face_id', 'Keltner_'])
+
+        for name, group in tem:
+            count_kel = 0
+            i_kel = 0
+            rows = group.shape[0]
+            while i_kel < rows:
+                f = group.iloc[i_kel, 1]
+                f_prev = f
+                rem = (f % n)
+                if rem == 0:
+                    rem = n
+                left = n - rem
+                temp = 1
+                i_kel += 1
+                while f <= (f_prev + left) and i_kel < rows:
+                    f = group.iloc[i_kel, 1]
+                    if f <= (f_prev + left):    
+                        temp += 1
+                    else:
+                        break
+                    i_kel += 1
+
+                if temp >= (n/2 + n%2) and n >= 2:
+                    count_kel += 1
+                if n == 1:
+                    count_kel += 1
+
+            kel_df1 = kel_df1.append({'face_id' : name, 'Keltner_' : count_kel},
+                ignore_index = True)
+
         dudf = copy.loc[filter3]
-        foo3 = dudf.groupby('face_id').count()
-        foo3 = foo3.add_suffix('_').reset_index()
-        dudf1 = foo3[['face_id','Du_']]
-        
-        result = pd.merge(cordf1, keldf1,how="outer", on="face_id")
-        result = pd.merge(result, dudf1,how="outer", on="face_id")
+        tem = dudf.groupby('face_id')
+        du_df1 = pd.DataFrame(columns = ['face_id', 'Du_'])
+
+        for name, group in tem:
+            count_du = 0
+            i_du = 0
+            rows = group.shape[0]
+            while i_du < rows:
+                f = group.iloc[i_du, 1]
+                f_prev = f
+                rem = (f % n)
+                if rem == 0:
+                    rem = n
+                left = n - rem
+                temp = 1
+                i_du += 1
+                while f <= (f_prev + left) and i_du < rows:
+                    f = group.iloc[i_du, 1]
+                    if f <= (f_prev + left):    
+                        temp += 1
+                    else:
+                        break
+                    i_du += 1
+
+                if temp >= (n/2 + n%2) and n >= 2:
+                    count_du += 1
+                if n == 1:
+                    count_du += 1
+
+            du_df1 = du_df1.append({'face_id' : name, 'Du_' : count_du},
+                ignore_index = True)
+
+        result = pd.merge(cor_df1, kel_df1,how="outer", on="face_id")
+        result = pd.merge(result, du_df1,how="outer", on="face_id")
         per.append(result)
         i += 1
-
-#### FROM HERE
-
 ##### TILL HERE
 
 
     # i = 0
     n_frames = df['frame'].max()
+    
+    n_frames = (n_frames/n) + (n_frames%n > 0)
 
     ind = emos_2.index(emotion)
     if (per[ind].empty):

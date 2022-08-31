@@ -228,8 +228,9 @@ class VideoWindow(QMainWindow):
                 paper = self.paper.currentText()
                 paper = paper.split(' ')[0]
                 emotion = self.emotion.currentText()
+                time_gran = self.time_gran.value()
                 # self.video_select.addItem(filename)
-                res = freqan.FreqAnalysis(filename, "extracted/extracted_{}.csv".format(filename), paper, emotion)
+                res = freqan.FreqAnalysis(filename, "extracted/extracted_{}.csv".format(filename), paper, emotion, time_gran)
                 self.vid_res[filename] = {'per':res[0], 'data_to_plot1':res[1], 'inds':res[2], 'medians':res[3], 'quartile1':res[4], 'quartile3':res[5], 'whiskers_min':res[6], 'whiskers_max':res[7]}
                 
 
@@ -241,8 +242,9 @@ class VideoWindow(QMainWindow):
         paper = self.paper.currentText()
         paper = paper.split(' ')[0]
         emotion = self.emotion.currentText()
+        time_gran = self.time_gran.value()
         # self.video_select.addItems(filenames)
-        res = coman.CombFreqAnalysis(filenames, len(filenames), paper, emotion)
+        res = coman.CombFreqAnalysis(filenames, len(filenames), paper, emotion, time_gran)
         self.vid_res[filename] = {'per':res[0], 'data_to_plot1':res[1], 'inds':res[2], 'medians':res[3], 'quartile1':res[4], 'quartile3':res[5], 'whiskers_min':res[6], 'whiskers_max':res[7]}
 
 
