@@ -430,8 +430,8 @@ class VideoWindow(QMainWindow):
                 # return (res)
 # -pose -gaze -verbose
 
-    def execute_seq_analysis(self, filenames, n_videos, paper, hyp):
-        strs = seqan.seq_analysis(filenames, n_videos, paper, hyp)
+    def execute_seq_analysis(self, filenames, n_videos, paper, hyp, time_gran):
+        strs = seqan.seq_analysis(filenames, n_videos, paper, hyp, time_gran)
         return strs
 
     def output_seq(self, strs):
@@ -445,7 +445,7 @@ class VideoWindow(QMainWindow):
         # path = "extracted/extracted_{}.csv".format(filename)
         paper = self.paper_seq.currentText()
         paper = paper.split(' ')[0]
-
+        time_gran = self.time_gran.value()
         #hyperparameters
         hyp = []
         hyp.append(self.minsup.value())
@@ -462,7 +462,7 @@ class VideoWindow(QMainWindow):
             self.errorlabel.show()
             self.errorlabel.setText("Error: Select video first")
         else:
-            worker = Worker(lambda: self.execute_seq_analysis(filenames, len(filenames), paper, hyp)) # Any other args, kwargs are passed to the run function
+            worker = Worker(lambda: self.execute_seq_analysis(filenames, len(filenames), paper, hyp, time_gran)) # Any other args, kwargs are passed to the run function
             worker.signals.result.connect(self.output_seq)
             worker.signals.finished.connect(self.thread_complete)
             worker.signals.progress.connect(self.progress_fn)
