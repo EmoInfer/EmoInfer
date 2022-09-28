@@ -29,37 +29,10 @@ def FreqAnalysis(filename, path, paper, emotion, time_gran):
     n = time_gran
 
     per = []
-    # i = 0
-    # for emo in emos:
-    # # emo = "Amusement"
-    #     filter1 = df['Cordaro'].str.find(emo) != -1
-    #     filter2 = df['Keltner'].str.find(emo) != -1
-    #     filter3 = df['Du'].str.find(emo) != -1
-
-    #     copy = df
-    #     cordf = copy.loc[filter1]
-    #     foo1 = cordf.groupby('face_id').count()
-    # #     print(newdf)
-    #     foo1 = foo1.add_suffix('_').reset_index()
-    #     cordf1 = foo1[['face_id','Cordaro_']]
-    # #     print(cordf1)
-        
-    #     keldf = copy.loc[filter2]
-    #     foo2 = keldf.groupby('face_id').count()
-    #     foo2 = foo2.add_suffix('_').reset_index()
-    #     keldf1 = foo2[['face_id','Keltner_']]
-        
-    #     dudf = copy.loc[filter3]
-    #     foo3 = dudf.groupby('face_id').count()
-    #     foo3 = foo3.add_suffix('_').reset_index()
-    #     dudf1 = foo3[['face_id','Du_']]
-        
-    #     result = pd.merge(cordf1, keldf1,how="outer", on="face_id")
-    #     result = pd.merge(result, dudf1,how="outer", on="face_id")
-    #     per.append(result)
-    #     i += 1
 
 #### FROM HERE
+    new_df = pd.DataFrame(columns = ["frame", "face_id", "Cordaro", "Keltner", "Du"]) 
+
     i = 0
     for emo in emos:
         filter1 = df['Cordaro'].str.find(emo) != -1
@@ -68,6 +41,7 @@ def FreqAnalysis(filename, path, paper, emotion, time_gran):
 
         copy = df
 
+        # CORDARO
         cordf = copy.loc[filter1]
         tem = cordf.groupby('face_id')
         cor_df1 = pd.DataFrame(columns = ['face_id', 'Cordaro_'])
@@ -79,6 +53,7 @@ def FreqAnalysis(filename, path, paper, emotion, time_gran):
             while i_cor < rows:
                 f = group.iloc[i_cor, 1]
                 f_prev = f
+                frame = (int)(f/n) + (f%n != 0)
                 rem = (f % n)
                 if rem == 0:
                     rem = n
@@ -93,13 +68,22 @@ def FreqAnalysis(filename, path, paper, emotion, time_gran):
                         break
                     i_cor += 1
 
-                if temp >= (n/2 + n%2) and n >= 2:
+                if (temp >= (n/2 + n%2) and n >= 2) or (n == 1):
                     count_cor += 1
-                if n == 1:
-                    count_cor += 1
+                    if (((new_df["frame"] == frame) & (new_df["face_id"] == name)).any()):
+                        if new_df[(new_df["frame"] == frame) & (new_df["face_id"] == name)]["Cordaro"].iloc[0] == "":
+                            new_df.loc[(new_df["frame"] == frame) & (new_df["face_id"] == name), "Cordaro"] = new_df[(new_df["frame"] == frame) & (new_df["face_id"] == name)]["Cordaro"].iloc[0] + emo
+                        else:
+                            new_df.loc[(new_df["frame"] == frame) & (new_df["face_id"] == name), "Cordaro"] = new_df[(new_df["frame"] == frame) & (new_df["face_id"] == name)]["Cordaro"].iloc[0] + ", " + emo
+                        # print(new_df)
+                    else:
+                        new_df = new_df.append({'frame' : frame, 'face_id' : name, 'Cordaro' : emo, 'Keltner' : "", 'Du' : ""}, ignore_index=True)
+                        # print(new_df)
+
             cor_df1 = cor_df1.append({'face_id' : name, 'Cordaro_' : count_cor},
                 ignore_index = True)
 
+        # KELTNER
         keldf = copy.loc[filter2]
 
         tem = keldf.groupby('face_id')
@@ -112,6 +96,7 @@ def FreqAnalysis(filename, path, paper, emotion, time_gran):
             while i_kel < rows:
                 f = group.iloc[i_kel, 1]
                 f_prev = f
+                frame = (int)(f/n) + (f%n != 0)
                 rem = (f % n)
                 if rem == 0:
                     rem = n
@@ -126,14 +111,22 @@ def FreqAnalysis(filename, path, paper, emotion, time_gran):
                         break
                     i_kel += 1
 
-                if temp >= (n/2 + n%2) and n >= 2:
+                if (temp >= (n/2 + n%2) and n >= 2) or (n == 1):
                     count_kel += 1
-                if n == 1:
-                    count_kel += 1
+                    if (((new_df["frame"] == frame) & (new_df["face_id"] == name)).any()):
+                        if new_df[(new_df["frame"] == frame) & (new_df["face_id"] == name)]["Keltner"].iloc[0] == "":
+                            new_df.loc[(new_df["frame"] == frame) & (new_df["face_id"] == name), "Keltner"] = new_df[(new_df["frame"] == frame) & (new_df["face_id"] == name)]["Keltner"].iloc[0] + emo
+                        else:
+                            new_df.loc[(new_df["frame"] == frame) & (new_df["face_id"] == name), "Keltner"] = new_df[(new_df["frame"] == frame) & (new_df["face_id"] == name)]["Keltner"].iloc[0] + ", " + emo
+                        # print(new_df)
+                    else:
+                        new_df = new_df.append({'frame' : frame, 'face_id' : name, 'Cordaro' : "", 'Keltner' : emo, 'Du' : ""}, ignore_index=True)
+                        # print(new_df)
 
             kel_df1 = kel_df1.append({'face_id' : name, 'Keltner_' : count_kel},
                 ignore_index = True)
 
+        # DU
         dudf = copy.loc[filter3]
         tem = dudf.groupby('face_id')
         du_df1 = pd.DataFrame(columns = ['face_id', 'Du_'])
@@ -145,6 +138,7 @@ def FreqAnalysis(filename, path, paper, emotion, time_gran):
             while i_du < rows:
                 f = group.iloc[i_du, 1]
                 f_prev = f
+                frame = (int)(f/n) + (f%n != 0)
                 rem = (f % n)
                 if rem == 0:
                     rem = n
@@ -159,10 +153,17 @@ def FreqAnalysis(filename, path, paper, emotion, time_gran):
                         break
                     i_du += 1
 
-                if temp >= (n/2 + n%2) and n >= 2:
+                if (temp >= (n/2 + n%2) and n >= 2) or (n == 1):
                     count_du += 1
-                if n == 1:
-                    count_du += 1
+                    if (((new_df["frame"] == frame) & (new_df["face_id"] == name)).any()):
+                        if new_df[(new_df["frame"] == frame) & (new_df["face_id"] == name)]["Du"].iloc[0] == "":
+                            new_df.loc[(new_df["frame"] == frame) & (new_df["face_id"] == name), "Du"] = new_df[(new_df["frame"] == frame) & (new_df["face_id"] == name)]["Du"].iloc[0] + emo
+                        else:
+                            new_df.loc[(new_df["frame"] == frame) & (new_df["face_id"] == name), "Du"] = new_df[(new_df["frame"] == frame) & (new_df["face_id"] == name)]["Du"].iloc[0] + ", " + emo
+                        # print(new_df)
+                    else:
+                        new_df = new_df.append({'frame' : frame, 'face_id' : name, 'Cordaro' : "", 'Keltner' : "", 'Du' : emo}, ignore_index=True)
+                        # print(new_df)
 
             du_df1 = du_df1.append({'face_id' : name, 'Du_' : count_du},
                 ignore_index = True)
@@ -172,7 +173,7 @@ def FreqAnalysis(filename, path, paper, emotion, time_gran):
         per.append(result)
         i += 1
 ##### TILL HERE
-
+    new_df.to_csv("extracted/extracted_{}_{}.csv".format(filename, time_gran))
 
     # i = 0
     n_frames = df['frame'].max()
