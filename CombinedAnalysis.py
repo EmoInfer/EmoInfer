@@ -47,9 +47,24 @@ def CombFreqAnalysis(filenames, n_videos, paper, emotion, time_gran):
 
     i = 0
     for emo in emos:
-        filter1 = df['Cordaro'].str.find(emo) != -1
-        filter2 = df['Keltner'].str.find(emo) != -1
-        filter3 = df['Du'].str.find(emo) != -1
+        if (emo == "Fear"):
+            filter1 = (df['Cordaro'].str.count(emo + ",") == 1) | ((df['Cordaro'].str.count(emo) == 1) & (df['Cordaro'].str.count("Fearfully") == 0))
+            filter2 = (df['Keltner'].str.count(emo + ",") == 1) | ((df['Keltner'].str.count(emo) == 1) & (df['Keltner'].str.count("Fearfully") == 0))
+            filter3 = (df['Du'].str.count(emo + ",") == 1) | ((df['Du'].str.count(emo) == 1) & (df['Du'].str.count("Fearfully") == 0))
+        else:
+            if (emo == "Disgust"):
+                filter1 = (df['Cordaro'].str.count(emo + ",") == 1) | ((df['Cordaro'].str.count(emo) == 1) & (df['Cordaro'].str.count("Disgusted") == 0))
+                filter2 = (df['Keltner'].str.count(emo + ",") == 1) | ((df['Keltner'].str.count(emo) == 1) & (df['Keltner'].str.count("Disgusted") == 0))
+                filter3 = (df['Du'].str.count(emo + ",") == 1) | ((df['Du'].str.count(emo) == 1) & (df['Du'].str.count("Disgusted") == 0))
+            else:
+                if (emo == "Surprise"):
+                    filter1 = (df['Cordaro'].str.count(emo + ",") == 1) | ((df['Cordaro'].str.count(emo) == 1) & (df['Cordaro'].str.count("Surprised") == 0))
+                    filter2 = (df['Keltner'].str.count(emo + ",") == 1) | ((df['Keltner'].str.count(emo) == 1) & (df['Keltner'].str.count("Surprised") == 0))
+                    filter3 = (df['Du'].str.count(emo + ",") == 1) | ((df['Du'].str.count(emo) == 1) & (df['Du'].str.count("Surprised") == 0))
+                else:
+                    filter1 = df['Cordaro'].str.count(emo) == 1
+                    filter2 = df['Keltner'].str.count(emo) == 1
+                    filter3 = df['Du'].str.count(emo) == 1
 
         copy = df
 
@@ -80,7 +95,7 @@ def CombFreqAnalysis(filenames, n_videos, paper, emotion, time_gran):
                         break
                     i_cor += 1
 
-                if (temp >= (n/2 + n%2) and n >= 2) or (n == 1):
+                if (temp >= (int(n/2) + n%2) and n >= 2) or (n == 1):
                     count_cor += 1
                     if (((new_df["frame"] == frame) & (new_df["face_id"] == name)).any()):
                         if new_df[(new_df["frame"] == frame) & (new_df["face_id"] == name)]["Cordaro"].iloc[0] == "":
@@ -123,7 +138,7 @@ def CombFreqAnalysis(filenames, n_videos, paper, emotion, time_gran):
                         break
                     i_kel += 1
 
-                if (temp >= (n/2 + n%2) and n >= 2) or (n == 1):
+                if (temp >= (int(n/2) + n%2) and n >= 2) or (n == 1):
                     count_kel += 1
                     if (((new_df["frame"] == frame) & (new_df["face_id"] == name)).any()):
                         if new_df[(new_df["frame"] == frame) & (new_df["face_id"] == name)]["Keltner"].iloc[0] == "":
@@ -165,7 +180,7 @@ def CombFreqAnalysis(filenames, n_videos, paper, emotion, time_gran):
                         break
                     i_du += 1
 
-                if (temp >= (n/2 + n%2) and n >= 2) or (n == 1):
+                if (temp >= (int(n/2) + n%2) and n >= 2) or (n == 1):
                     count_du += 1
                     if (((new_df["frame"] == frame) & (new_df["face_id"] == name)).any()):
                         if new_df[(new_df["frame"] == frame) & (new_df["face_id"] == name)]["Du"].iloc[0] == "":
@@ -186,11 +201,13 @@ def CombFreqAnalysis(filenames, n_videos, paper, emotion, time_gran):
         i += 1
 ##### TILL HERE
 
+    new_df = new_df.sort_values(by=['frame'])
+    new_df = new_df.reset_index(drop=True)
     new_df.to_csv("extracted/extracted_{}_{}.csv".format(filename, time_gran))
 
     n_frames = df['frame'].max()
 
-    n_frames = (n_frames/n) + (n_frames%n > 0)
+    n_frames = int(n_frames/n) + (n_frames%n > 0)
     
     ind = emos_2.index(emotion)
     if (per[ind].empty):

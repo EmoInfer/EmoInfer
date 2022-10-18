@@ -79,7 +79,7 @@ background-color: rgb(243, 243, 243);</string>
      <enum>Qt::DefaultContextMenu</enum>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="emo_extraction">
      <attribute name="title">
