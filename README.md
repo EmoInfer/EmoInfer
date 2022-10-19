@@ -50,7 +50,7 @@ To run _EmoInfer_,
 
   * _'final_uniq_sequences.txt'_: sequences for every unique emotion
 * Suggested methodological choices and the underlying rationale can be found [here](https://tinyurl.com/EmoInferSeq).
-* The time granularity from the Analysis tab is used for sequencing as well.
+* The last used setting for time granularity from the Analysis tab is reflected in the sequencing as well.
 
 
 ## Note
