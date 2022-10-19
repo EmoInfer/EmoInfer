@@ -40,7 +40,7 @@ To run _EmoInfer_,
 * Images showing resultant graphs are saved in the _'{HEAD}/images'_ folder.
 * Overall statistics of the video(s) relevant to a particular coding scheme are saved in the _'{HEAD}/images/{coding scheme}/{video id}'_ folder.
 * Emotion-specific results are saved in _'{HEAD}/images/{coding scheme}/{video id}/{emotion}.png'_. 
-* Time granularity: The time granularity of the analysis can be modified to 'n' frames. A threshold of 50% is used for inferring the presence of an emotion in a bucket of 'n' frames. The modified file of extracted emotions is saved in the _'{HEAD}/extracted'_ folder as _'extracted__{filename}\__{time_granularity}.csv'_ . Each row in this file can be read off as an aggregate of the k<sup>th</sup> block of 'n' frames, where 'k' corresponds to the frame-id.
+* Time granularity: The time granularity of the analysis can be modified to 'n' frames. A threshold of 50% is used for inferring the presence of an emotion in a bucket of 'n' frames. The modified file of extracted emotions is saved in the _'{HEAD}/extracted'_ folder as _'extracted__{filename}\__{time_granularity}.csv'_ . Each row in this file can be read off as an aggregate of the k<sup>th</sup> block of 'n' frames, where 'k' corresponds to the frame-id column.
 
 **4. Sequencing:** _EmoInfer_ also supports the extraction of important sequences from the inferred emotions in the video. 
 * After the extraction of emotion sequences, three files are saved in the _'{HEAD}/sequencing/{coding scheme}/{video id}'_ folder, with the details of emotion sequences inferred for each coding scheme and video.
@@ -58,6 +58,7 @@ To run _EmoInfer_,
 * Steps 3 (analysis) and 4 (sequencing) use the intermediate files generated from steps 1 (facial action unit extraction) and 2 (emotion inference). As long as those intermediate files have been generated apriori, steps 3 and 4 do not need to be performed synchronously. This allows, for example, picking up previously unfinished analyses at a later point in time. For asynchronous analyses, simply upload the corresponding video file to _EmoInfer_ and directly proceed with steps 3 or 4.
 * Steps 3 and 4 are independent of each other and can be performed in any order.
 * We recommend using python 3.7.3 and above to run _EmoInfer_. 
+* By default, _EmoInfer_ assumes that there may be multiple faces in input videos and therefore uses _FaceLandmarkVidMulti_ from OpenFace to extract facial action units. If you have video feeds with mostly one face in your data (e.g., individual problem-solving), we suggest replacing _FaceLandmarkVidMulti_ with _FaceLandmarkVid_ in the _'app.py'_ file for better accuracy.
 
 ## Citation
 
