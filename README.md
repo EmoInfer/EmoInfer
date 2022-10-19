@@ -40,7 +40,7 @@ To run _EmoInfer_,
 * Images showing resultant graphs are saved in the _'{HEAD}/images'_ folder.
 * Overall statistics of the video(s) relevant to a particular coding scheme are saved in the _'{HEAD}/images/{coding scheme}/{video id}'_ folder.
 * Emotion-specific results are saved in _'{HEAD}/images/{coding scheme}/{video id}/{emotion}.png'_. 
-* Time granularity : The time granularity of the analysis can be modified to 'n' frames. It uses a 50% threshold for presence of an emotion in a bucket of 'n' frames. The modified file of extracted emotions is saved as _'extracted__{filename}_{time_granularity}.csv'_
+* Time granularity : The time granularity of the analysis can be modified to 'n' frames. It uses a 50% threshold for presence of an emotion in a bucket of 'n' frames. The modified file of extracted emotions is saved as _'extracted__{filename}__{time_granularity}.csv'_
 
 **4. Sequencing:** _EmoInfer_ also supports the extraction of important sequences from the inferred emotions in the video. 
 * After the extraction of emotion sequences, three files are saved in the _'{HEAD}/sequencing/{coding scheme}/{video id}'_ folder, with the details of emotion sequences inferred for each coding scheme and video.
@@ -67,7 +67,7 @@ If you use _EmoInfer_ in your work and/or publications, we ask you to kindly cit
 
 Sinha, T., Dhandhania, S. 2022. Democratizing emotion research in learning sciences. In: Rodrigo, M.M., Matsuda, N., Cristea, A.I., Dimitrova, V. (eds) _Artificial Intelligence in Education_. Lecture Notes in Computer Science, vol 13356. Springer, Cham. doi: 10.1007/978-3-031-11647-6_27
 
-**Empirical evidence based on the _EmoInfer_ pipeline**
+**Empirical evidence motivating development of the _EmoInfer_ pipeline**
 
 Sinha, T. 2022. Enriching problem-solving followed by instruction with explanatory accounts of emotions. _Journal of the Learning Sciences_, 31 (2), 151-198, doi: 10.1080/10508406.2021.1964506
 
