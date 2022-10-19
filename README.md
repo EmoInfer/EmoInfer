@@ -40,7 +40,7 @@ To run _EmoInfer_,
 * Images showing resultant graphs are saved in the _'{HEAD}/images'_ folder.
 * Overall statistics of the video(s) relevant to a particular coding scheme are saved in the _'{HEAD}/images/{coding scheme}/{video id}'_ folder.
 * Emotion-specific results are saved in _'{HEAD}/images/{coding scheme}/{video id}/{emotion}.png'_. 
-* Time granularity: The time granularity of the analysis can be modified to 'n' frames. A threshold of 50% is used for inferring the presence of an emotion in a bucket of 'n' frames. The modified file of extracted emotions is saved in the _'{HEAD}/extracted'_ folder as _'extracted__{filename}\__{time_granularity}.csv'_ . Each row in this file can be read off as an aggregate of the k_{th}_ block of 'n' frames, where 'k' corresponds to the frame-id.
+* Time granularity: The time granularity of the analysis can be modified to 'n' frames. A threshold of 50% is used for inferring the presence of an emotion in a bucket of 'n' frames. The modified file of extracted emotions is saved in the _'{HEAD}/extracted'_ folder as _'extracted__{filename}\__{time_granularity}.csv'_ . Each row in this file can be read off as an aggregate of the k^{th} block of 'n' frames, where 'k' corresponds to the frame-id.
 
 **4. Sequencing:** _EmoInfer_ also supports the extraction of important sequences from the inferred emotions in the video. 
 * After the extraction of emotion sequences, three files are saved in the _'{HEAD}/sequencing/{coding scheme}/{video id}'_ folder, with the details of emotion sequences inferred for each coding scheme and video.
