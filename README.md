@@ -59,6 +59,7 @@ To run _EmoInfer_,
 * Steps 3 and 4 are independent of each other and can be performed in any order.
 * We recommend using python 3.7.3 and above to run _EmoInfer_. 
 * By default, _EmoInfer_ assumes that there may be multiple faces in input videos and therefore uses _FaceLandmarkVidMulti_ from OpenFace to extract facial action units. If you have video feeds with mostly one face in your data (e.g., individual problem-solving), we suggest replacing _FaceLandmarkVidMulti_ with _FaceLandmarkVid_ in the _'app.py'_ file for better accuracy.
+* By default, _EmoInfer_ visualizes the tracked face and the facial action units. For better speed when analyzing multiple videos, we suggest removing the options _-vis-track_ and _-vis-aus_ from the _FaceLandmarkVidMulti_ command present in the _'app.py'_ file.
 
 ## Citation
 
